@@ -1,0 +1,44 @@
+.login-shell {
+  min-height: 100vh;
+  min-width: 1366px;
+  background-image: url('/images/login-background.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.login-overlay {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(15, 39, 68, 0.84), rgba(15, 39, 68, 0.55));
+}
+
+.login-panel {
+  width: 460px;
+  padding: 2rem;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: var(--dd-shadow-soft);
+  text-align: center;
+}
+
+.login-logo-full {
+  display: block;
+  width: min(280px, 100%);
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto 16px;
+}
+
+.login-panel p {
+  color: #5f6a76;
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+  backdrop-filter: blur(2px);
+}
+
+.login-panel p {
+  color: #5f6a76;
+}

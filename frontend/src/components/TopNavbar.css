@@ -1,0 +1,37 @@
+.top-navbar-shell {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #ebe6da;
+}
+
+.top-navbar-left h2 {
+  font-size: 30px;
+  color: var(--dd-navy);
+  font-weight: 700;
+}
+
+.top-navbar-btn {
+  border: 1px solid #e5dfd2;
+  background: #ffffff;
+  color: var(--dd-navy);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.45rem 0.75rem;
+}
+
+.top-navbar-btn:hover,
+.top-navbar-btn:focus {
+  border-color: var(--dd-gold);
+  color: var(--dd-navy);
+  background: #fffef9;
+}
+
+.top-navbar-right .dropdown-menu {
+  border-radius: 12px;
+  border: 1px solid #ebe6da;
+  box-shadow: var(--dd-shadow-soft);
+}

@@ -1,5 +1,9 @@
 :root {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --dd-navy: #0f2744;
+  --dd-gold: #c9a227;
+  --dd-bg: #f8f6f2;
+  --dd-shadow-soft: 0 8px 24px rgba(15, 39, 68, 0.08);
 }
 
 * {
@@ -8,36 +12,10 @@
 
 body {
   margin: 0;
-  background: #f4f5f7;
-  color: #1f2937;
+  background: var(--dd-bg);
+  color: var(--dd-navy);
 }
 
 #root {
   min-height: 100vh;
-}
-
-.app-shell {
-  min-height: 100vh;
-}
-
-.sidebar {
-  width: 260px;
-  min-height: 100vh;
-  transition: width 0.2s ease;
-}
-
-.sidebar.collapsed {
-  width: 88px;
-}
-
-.app-content {
-  min-width: 0;
-}
-
-.top-navbar {
-  min-height: 64px;
-}
-
-.auth-card {
-  width: min(420px, 92vw);
 }

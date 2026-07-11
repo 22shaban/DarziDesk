@@ -1,0 +1,26 @@
+.dashboard-page {
+  color: var(--dd-navy);
+}
+
+.dashboard-block {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  min-height: 240px;
+  padding: 1.5rem;
+}
+
+.dashboard-block h2 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.dashboard-block p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #465364;
+}
