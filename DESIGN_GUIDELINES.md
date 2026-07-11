@@ -4,29 +4,55 @@
 >
 > This document defines the official UI/UX specification for DarziDesk.
 > Every future page, component, and feature must follow these guidelines.
-> Do not introduce new layouts, colors, or components unless explicitly approved.
+> Do not introduce new layouts, colors, components, or workflows unless explicitly approved.
+
+---
+
+# Version Information
+
+**Application**
+
+DarziDesk
+
+**Version**
+
+v1.0
+
+**Status**
+
+Frozen
+
+**Last Updated**
+
+July 2026
 
 ---
 
 # Application
 
-**Name**
+## Name
 
-DarziDesk
+🧵 DarziDesk
 
-**Subtitle**
+## Subtitle
 
 Tailor Shop Management System
 
-**Target Users**
+## Target Users
 
-Owner-only desktop application for men's tailoring shops.
+Owner-only desktop application for small men's tailoring businesses.
 
-**Supported Devices**
+No customer portal.
+
+No employee portal.
+
+## Supported Devices
 
 Desktop only.
 
-Responsive/mobile layouts are not required.
+Minimum resolution: **1366 × 768**
+
+Mobile and tablet layouts are NOT required.
 
 ---
 
@@ -40,31 +66,59 @@ Design inspiration:
 - Modern SaaS
 - Apple-inspired simplicity
 
-The interface should look elegant, clean, and professional rather than overly colorful or enterprise-heavy.
+The interface should be elegant, minimal, modern, and professional.
+
+Avoid an enterprise ERP appearance.
 
 ---
 
 # Color Palette
 
-Primary
+## Primary
 
 Navy Blue
 
-Secondary
+Hex:
+
+#0F2744
+
+---
+
+## Secondary
 
 Gold
 
-Background
+Hex:
+
+#C9A227
+
+---
+
+## Background
+
+Light Warm White
+
+Hex:
+
+#F8F6F2
+
+---
+
+## Cards
 
 White
 
-Cards
+Hex:
 
-White with subtle shadow
+#FFFFFF
 
-Sidebar
+Soft shadow
 
-Dark Navy
+Rounded corners
+
+---
+
+## Status Colors
 
 Success
 
@@ -86,15 +140,17 @@ Blue
 
 # Branding
 
-Application Name
+## Application Name
 
 🧵 DarziDesk
 
-Subtitle
+## Subtitle
 
 Tailor Shop Management System
 
-Footer
+---
+
+# Footer
 
 🧵 DarziDesk v1.0
 
@@ -106,9 +162,11 @@ Powered by AWS
 
 # Layout
 
-Desktop Only
+Desktop only.
 
-### Sidebar
+---
+
+## Sidebar
 
 Position
 
@@ -126,11 +184,13 @@ Collapsed Width
 
 80px
 
-When collapsed
+Collapsed Mode
 
-- Icons only
-- Tooltip on hover
-- More workspace for tables
+• Icons only
+
+• Tooltip on hover
+
+• More workspace for tables
 
 Sidebar Items
 
@@ -152,19 +212,25 @@ Sidebar Items
 
 ⚙️ Settings
 
+Dashboard remains highlighted when active.
+
 ---
 
 # Top Navigation
 
-Left
+## Left
 
-🔍 Global Search
+☰ Sidebar Toggle
 
-Right
+Dashboard Title
+
+---
+
+## Right
 
 🔔 Notifications
 
-➕ New Order
+➕ Quick Actions
 
 🏪 Shop Name ▼
 
@@ -172,7 +238,7 @@ Example
 
 Royal Men's Tailor ▼
 
-Dropdown
+Dropdown Items
 
 Store Profile
 
@@ -182,35 +248,33 @@ Logout
 
 ---
 
+## Quick Actions Menu
+
+Contains only
+
++ New Order
+
++ Add Customer
+
+---
+
 # Dashboard
 
 ## KPI Cards
 
-1. Active Orders
+Active Orders
 
-2. Monthly Revenue
+Monthly Revenue
 
-3. Inventory Value
+Inventory Value
 
-4. Low Stock Items
-
----
-
-## Charts
-
-Revenue Overview
-
-Order Status
-
----
-
-## Recent Orders
-
-Shows latest customer orders.
+Low Stock Items
 
 ---
 
 ## Recent Activity
+
+Shows latest activities.
 
 Examples
 
@@ -228,11 +292,13 @@ Examples
 
 ## Ready for Pickup
 
-No delivery scheduling.
+Purpose
 
-No pickup time.
+Shows garments ready for customer pickup.
 
-Only show
+Do NOT display pickup time.
+
+Display ONLY
 
 Customer Name
 
@@ -268,7 +334,9 @@ Remaining Amount
 
 Status
 
-Workflow
+---
+
+## Order Workflow
 
 New
 
@@ -294,17 +362,27 @@ Ready
 
 ↓
 
-Delivered
+Picked Up
 
-When status changes to Ready
+---
+
+## Notification Rule
+
+When Order Status changes to
+
+Ready
 
 ↓
 
-Amazon SES sends Email notification
+Amazon SES automatically sends an Email notification to the customer.
+
+SMS using Amazon SNS may be added later as an optional feature.
 
 ---
 
 # Customers
+
+Contains
 
 Customer Details
 
@@ -322,11 +400,17 @@ No customer login.
 
 Supported Garments
 
-- Shirt
-- Suit
-- Blazer
-- Kurta
-- Sherwani
+• Shirt
+
+• Suit
+
+• Blazer
+
+• Kurta
+
+• Sherwani
+
+Measurements should remain reusable for future orders.
 
 ---
 
@@ -344,19 +428,21 @@ Inventory Value
 
 Low Stock
 
-Business Rule
+---
 
-Customer Fabric
+## Business Rule
 
-↓
-
-Inventory unchanged
-
-Shop Fabric
+Customer provides fabric
 
 ↓
 
-Inventory decreases
+Inventory remains unchanged
+
+Shop provides fabric
+
+↓
+
+Inventory quantity decreases
 
 ---
 
@@ -376,23 +462,29 @@ Status
 
 Assigned Orders
 
-No Attendance
+Not Included
 
-No Payroll
+❌ Attendance
+
+❌ Payroll
+
+❌ Shift Management
 
 ---
 
 # Invoices
 
-Simple printable invoice
+Simple printable invoice.
+
+Contains
 
 Customer
 
 Order
 
-Advance
+Advance Paid
 
-Remaining
+Remaining Amount
 
 Total
 
@@ -408,6 +500,10 @@ Orders
 
 Employee Performance
 
+No complex analytics.
+
+No BI dashboards.
+
 ---
 
 # Settings
@@ -422,11 +518,15 @@ Backup & Restore
 
 AWS Integration
 
+No additional settings pages.
+
 ---
 
 # Store Profile
 
-Owner configures
+Configured during first login or later from Settings.
+
+Fields
 
 Shop Logo
 
@@ -434,15 +534,15 @@ Shop Name
 
 Owner Name
 
-Phone
+Phone Number
 
 Email (Optional)
 
 Address
 
-After saving
+After saving,
 
-The Shop Name appears automatically on
+Shop Name automatically appears in
 
 Dashboard
 
@@ -458,39 +558,45 @@ Top Navigation
 
 # Logo
 
-Official logo location
+Official Location
 
-frontend/src/assets/logo/
+frontend/public/logo/
 
 Files
 
 darzidesk-logo.png
 
-favicon.png
+darzidesk-logo.svg
 
-SVG can replace PNG later.
+favicon.ico
 
 ---
 
 # Icons
 
-Use consistent modern outline icons.
+Use one icon library only.
 
-Avoid mixing icon libraries.
+Preferred
+
+React Icons
+
+Use modern outline icons.
 
 ---
 
 # Card Design
 
-Rounded corners
+Rounded Corners
 
-Subtle shadows
+Soft Shadow
 
-Consistent spacing
+Consistent Padding
 
-Minimal borders
+Minimal Borders
 
-Premium appearance
+Premium Appearance
+
+Equal Heights
 
 ---
 
@@ -498,11 +604,11 @@ Premium appearance
 
 Professional
 
-Easy to read
+Readable
 
 Consistent hierarchy
 
-No decorative fonts except logo.
+No decorative fonts except the logo.
 
 ---
 
@@ -510,58 +616,126 @@ No decorative fonts except logo.
 
 Generous whitespace.
 
-Avoid clutter.
+Consistent padding.
 
-Maintain consistent margins and padding across all pages.
+Consistent margins.
+
+Avoid clutter.
 
 ---
 
 # UI Rules
 
-DO
+## DO
 
 ✅ Keep layout consistent
 
-✅ Keep components reusable
+✅ Keep reusable components
 
-✅ Use navy & gold branding
+✅ Use Navy & Gold branding
 
 ✅ Keep dashboard clean
 
 ✅ Use color-coded status badges
 
-DON'T
+✅ Follow Bootstrap 5 spacing
 
-❌ Add unnecessary widgets
+---
 
-❌ Add weather
+## DON'T
 
-❌ Add appointments
+❌ Add Weather Widget
 
-❌ Add customer portal
+❌ Add Appointments
 
-❌ Add payment gateway
+❌ Add Customer Portal
 
-❌ Add GST calculations
+❌ Add Payment Gateway
 
-❌ Add enterprise ERP features
+❌ Add GST Calculations
 
-❌ Add delivery tracking
+❌ Add ERP Features
+
+❌ Add Delivery Tracking
+
+❌ Add Random Dashboard Widgets
+
+❌ Change the navigation structure
 
 ---
 
 # AWS Branding
 
-Footer
+Footer only
 
 Powered by AWS
 
-The application should subtly showcase AWS without overwhelming the UI.
+AWS branding should remain subtle and professional.
+
+---
+
+# Technology Rules
+
+Frontend
+
+React + Vite
+
+Bootstrap 5
+
+React Router
+
+Axios
+
+React Icons
+
+Backend
+
+Flask
+
+REST API
+
+Boto3
+
+Database
+
+Amazon DynamoDB
+
+---
+
+# Development Rules
+
+Desktop-first only.
+
+Component-based architecture.
+
+Reusable React components.
+
+Separate UI from business logic.
+
+No inline styles unless absolutely necessary.
+
+No hardcoded production data.
+
+No duplicate components.
+
+Keep code modular and scalable.
+
+---
+
+# GitHub Copilot Rule
+
+GitHub Copilot must follow this document when generating UI components or layouts.
+
+If generated code conflicts with this specification,
+
+THIS DOCUMENT ALWAYS TAKES PRIORITY.
 
 ---
 
 # Final Rule
 
-If a future design or generated code conflicts with this document,
+This document is considered **Frozen**.
 
-THIS DOCUMENT TAKES PRIORITY.
+Any future UI or UX changes require explicit approval before implementation.
+
+No additional pages, widgets, colors, layouts, or workflows should be introduced without updating this document.
