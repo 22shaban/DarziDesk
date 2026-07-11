@@ -1,0 +1,31 @@
+.orders-table-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  overflow: hidden;
+}
+
+.orders-table-card .table {
+  margin-bottom: 0;
+}
+
+.orders-table-card thead th {
+  background: #fbfaf7;
+  color: var(--dd-navy);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #ebe6da;
+  white-space: nowrap;
+}
+
+.orders-table-empty-cell {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.orders-status-support {
+  padding: 1rem;
+}
