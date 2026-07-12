@@ -1,0 +1,9 @@
+.settings-page {
+  color: var(--dd-navy);
+}
+
+.settings-page h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}

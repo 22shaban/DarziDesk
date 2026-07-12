@@ -1,0 +1,37 @@
+.settings-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.settings-field-input {
+  border-color: #e5dfd2;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.settings-field-input::placeholder {
+  color: #8691a0;
+}
+
+.settings-save-btn {
+  border-radius: 12px;
+  background: var(--dd-navy);
+  border-color: var(--dd-navy);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.1rem;
+}
+
+.settings-save-btn:hover,
+.settings-save-btn:focus {
+  background: #122f52;
+  border-color: #122f52;
+  color: #ffffff;
+}

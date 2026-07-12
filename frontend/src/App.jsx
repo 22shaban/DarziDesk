@@ -9,6 +9,7 @@ import InventoryPage from './pages/InventoryPage'
 import EmployeesPage from './pages/EmployeesPage'
 import InvoicesPage from './pages/InvoicesPage'
 import ReportsPage from './pages/ReportsPage'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/employees" element={<EmployeesPage />} />
         <Route path="/invoices" element={<InvoicesPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>

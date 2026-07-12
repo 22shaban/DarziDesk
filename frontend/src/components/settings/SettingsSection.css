@@ -1,0 +1,13 @@
+.settings-section-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+}
+
+.settings-section-card h2 {
+  margin: 0;
+  color: var(--dd-navy);
+  font-size: 1.03rem;
+  font-weight: 700;
+}
