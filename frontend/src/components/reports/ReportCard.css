@@ -1,0 +1,16 @@
+.report-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+}
+
+.report-card h3 {
+  margin: 0;
+  color: var(--dd-navy);
+  font-size: 1.03rem;
+  font-weight: 700;
+}

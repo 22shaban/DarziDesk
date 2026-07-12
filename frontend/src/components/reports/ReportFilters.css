@@ -1,0 +1,44 @@
+.report-filters-card {
+  border-radius: 20px;
+  border: 1px solid #ebe6da;
+  box-shadow: var(--dd-shadow-soft);
+}
+
+.report-filter-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.report-date-placeholder,
+.report-filter-select {
+  border-color: #e5dfd2;
+  border-radius: 12px;
+  box-shadow: none;
+  background: #ffffff;
+  color: var(--dd-navy);
+}
+
+.report-date-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: left;
+}
+
+.report-generate-btn {
+  border-radius: 12px;
+  background: var(--dd-navy);
+  border-color: var(--dd-navy);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.1rem;
+}
+
+.report-generate-btn:hover,
+.report-generate-btn:focus {
+  background: #122f52;
+  border-color: #122f52;
+  color: #ffffff;
+}

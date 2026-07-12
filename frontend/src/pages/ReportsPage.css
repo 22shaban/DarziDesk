@@ -1,0 +1,23 @@
+.reports-page {
+  color: var(--dd-navy);
+}
+
+.reports-page h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.reports-preview-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  min-height: 320px;
+}
+
+.reports-preview-header h2 {
+  font-size: 1.03rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
