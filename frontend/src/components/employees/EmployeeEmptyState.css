@@ -1,0 +1,24 @@
+.employee-empty-state {
+  color: var(--dd-navy);
+}
+
+.employee-empty-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: rgba(15, 39, 68, 0.08);
+  color: var(--dd-gold);
+  font-size: 2rem;
+}
+
+.employee-empty-state h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.employee-empty-state p {
+  color: #5f6a76;
+}

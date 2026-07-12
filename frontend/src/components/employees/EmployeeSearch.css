@@ -1,0 +1,20 @@
+.employee-search-bar .input-group-text,
+.employee-search-bar .form-control {
+  border-color: #e5dfd2;
+  background: #ffffff;
+  color: var(--dd-navy);
+}
+
+.employee-search-bar .input-group-text {
+  border-radius: 12px 0 0 12px;
+  color: var(--dd-gold);
+}
+
+.employee-search-bar .form-control {
+  border-radius: 0 12px 12px 0;
+  box-shadow: none;
+}
+
+.employee-search-bar .form-control::placeholder {
+  color: #8691a0;
+}
