@@ -1,1 +1,1 @@
-"""Data model package placeholder for DynamoDB entities."""
+"""Data model package placeholder for future DynamoDB entity definitions."""

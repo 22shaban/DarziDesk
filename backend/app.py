@@ -1,25 +1,38 @@
+"""Flask application entry point and factory for the DarziDesk backend."""
+
+from __future__ import annotations
+
+import os
+
 from flask import Flask
-from flask_cors import CORS
 
-from config.settings import AppConfig
-from routes.health import health_blueprint
+from config.settings import BaseConfig, get_config_class
+from extensions import register_extensions
+from middleware import register_middlewares
+from routes import register_blueprints
+from utils.response import json_response
 
 
-def create_app() -> Flask:
+def create_app(config_class: type[BaseConfig] | None = None) -> Flask:
+    """Create and configure the Flask application instance."""
     app = Flask(__name__)
-    app.config.from_object(AppConfig)
+    selected_config = config_class or get_config_class(os.getenv("APP_ENV"))
+    app.config.from_object(selected_config)
 
-    CORS(app, resources={r"/api/*": {"origins": app.config["CORS_ALLOWED_ORIGINS"]}})
-
-    app.register_blueprint(health_blueprint)
+    register_extensions(app)
+    register_middlewares(app)
+    register_blueprints(app)
 
     @app.get("/")
-    def index():
-        return {
-            "service": app.config["APP_NAME"],
-            "status": "ok",
-            "message": "DarziDesk API foundation is running"
-        }, 200
+    def index() -> tuple[dict[str, object], int]:
+        """Provide a lightweight root response for local runtime checks."""
+        return json_response(
+            "DarziDesk API foundation is running",
+            data={
+                "service": app.config["APP_NAME"],
+                "version": app.config["APP_VERSION"],
+            },
+        )
 
     return app
 
@@ -28,4 +41,9 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(host=app.config["FLASK_HOST"], port=app.config["FLASK_PORT"], debug=app.config["FLASK_DEBUG"])
+    app.run(
+        host=app.config["FLASK_HOST"],
+        port=app.config["FLASK_PORT"],
+        debug=app.config["FLASK_DEBUG"],
+        use_reloader=False,
+    )
