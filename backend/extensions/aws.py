@@ -26,6 +26,9 @@ def init_aws_clients(app: Flask) -> None:
         "ses": ses_client,
         "s3": s3_client,
     }
-    app.extensions["dynamodb_service"] = DynamoDBService(client=dynamodb_client)
+    app.extensions["dynamodb_service"] = DynamoDBService(
+        client=dynamodb_client,
+        table_name=app.config["DYNAMODB_TABLE"],
+    )
     app.extensions["ses_service"] = SESService(client=ses_client)
     app.extensions["s3_service"] = S3Service(client=s3_client)

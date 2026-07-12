@@ -36,6 +36,7 @@ class BaseConfig:
     AWS_REGION = os.getenv("AWS_REGION", "ap-south-1")
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    DYNAMODB_TABLE = os.getenv("DYNAMODB_TABLE", "Orders")
     DYNAMODB_TABLE_PREFIX = os.getenv("DYNAMODB_TABLE_PREFIX", "darzidesk")
 
     LOG_DIR = str(BASE_DIR / "logs")
