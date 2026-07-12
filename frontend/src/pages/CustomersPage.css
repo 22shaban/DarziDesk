@@ -1,0 +1,35 @@
+.customers-page {
+  color: var(--dd-navy);
+}
+
+.customers-page h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.customers-page p {
+  color: #5f6a76;
+}
+
+.customers-add-btn {
+  border-radius: 12px;
+  background: var(--dd-navy);
+  border-color: var(--dd-navy);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.1rem;
+}
+
+.customers-add-btn:hover,
+.customers-add-btn:focus {
+  background: #122f52;
+  border-color: #122f52;
+  color: #ffffff;
+}
+
+.customers-toolbar {
+  border-radius: 20px;
+  border: 1px solid #ebe6da;
+  box-shadow: var(--dd-shadow-soft);
+}

@@ -1,0 +1,23 @@
+.customer-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+}
+
+.customer-card h3 {
+  margin: 0;
+  font-size: 1.03rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.customer-card .placeholder-line {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(15, 39, 68, 0.08);
+}
+
+.customer-card .placeholder-line + .placeholder-line {
+  margin-top: 0.75rem;
+}

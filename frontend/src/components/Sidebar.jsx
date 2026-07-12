@@ -14,14 +14,14 @@ import './Sidebar.css'
 
 const menuItems = [
   { label: 'Dashboard', icon: FiGrid, to: '/dashboard' },
-  { label: 'Orders', icon: FiClipboard, to: '/dashboard' },
-  { label: 'Customers', icon: FiUsers, to: '/dashboard' },
-  { label: 'Measurements', icon: FiShoppingBag, to: '/dashboard' },
-  { label: 'Fabric & Inventory', icon: FiLayers, to: '/dashboard' },
-  { label: 'Employees', icon: FiUsers, to: '/dashboard' },
-  { label: 'Invoices', icon: FiFileText, to: '/dashboard' },
-  { label: 'Reports', icon: FiBarChart2, to: '/dashboard' },
-  { label: 'Settings', icon: FiSettings, to: '/dashboard' },
+  { label: 'Orders', icon: FiClipboard, to: '/orders' },
+  { label: 'Customers', icon: FiUsers, to: '/customers' },
+  { label: 'Measurements', icon: FiShoppingBag, to: '/measurements' },
+  { label: 'Fabric & Inventory', icon: FiLayers, to: '/inventory' },
+  { label: 'Employees', icon: FiUsers, to: '/employees' },
+  { label: 'Invoices', icon: FiFileText, to: '/invoices' },
+  { label: 'Reports', icon: FiBarChart2, to: '/reports' },
+  { label: 'Settings', icon: FiSettings, to: '/settings' },
 ]
 
 function Sidebar({ collapsed }) {
@@ -47,8 +47,8 @@ function Sidebar({ collapsed }) {
             key={label}
             to={to}
             title={collapsed ? label : ''}
-            className={({ isActive }) =>
-              `sidebar-link ${isActive && label === 'Dashboard' ? 'active' : ''}`
+           className={({ isActive }) =>
+  `sidebar-link ${isActive ? 'active' : ''}`
             }
           >
             <Icon className="sidebar-icon" />
