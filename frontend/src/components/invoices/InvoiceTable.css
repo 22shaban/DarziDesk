@@ -1,0 +1,27 @@
+.invoice-table-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  overflow: hidden;
+}
+
+.invoice-table-card .table {
+  margin-bottom: 0;
+}
+
+.invoice-table-card thead th {
+  background: #fbfaf7;
+  color: var(--dd-navy);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #ebe6da;
+  white-space: nowrap;
+}
+
+.invoice-table-empty-cell {
+  padding: 0;
+  border-bottom: 0;
+}

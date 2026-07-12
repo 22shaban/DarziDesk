@@ -1,0 +1,20 @@
+.invoice-search-bar .input-group-text,
+.invoice-search-bar .form-control {
+  border-color: #e5dfd2;
+  background: #ffffff;
+  color: var(--dd-navy);
+}
+
+.invoice-search-bar .input-group-text {
+  border-radius: 12px 0 0 12px;
+  color: var(--dd-gold);
+}
+
+.invoice-search-bar .form-control {
+  border-radius: 0 12px 12px 0;
+  box-shadow: none;
+}
+
+.invoice-search-bar .form-control::placeholder {
+  color: #8691a0;
+}

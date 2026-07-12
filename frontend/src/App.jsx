@@ -7,6 +7,7 @@ import CustomersPage from './pages/CustomersPage'
 import MeasurementsPage from './pages/MeasurementsPage'
 import InventoryPage from './pages/InventoryPage'
 import EmployeesPage from './pages/EmployeesPage'
+import InvoicesPage from './pages/InvoicesPage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/measurements" element={<MeasurementsPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/employees" element={<EmployeesPage />} />
+        <Route path="/invoices" element={<InvoicesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
