@@ -1,7 +1,7 @@
 import { FiSearch } from 'react-icons/fi'
 import './CustomerSearch.css'
 
-function CustomerSearch({ placeholder = 'Customer name / phone search' }) {
+function CustomerSearch({ placeholder = 'Search Customer' }) {
   return (
     <div className="customers-search-bar input-group">
       <span className="input-group-text">

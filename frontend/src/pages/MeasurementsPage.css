@@ -1,0 +1,53 @@
+.measurements-page {
+  color: var(--dd-navy);
+}
+
+.measurements-page h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.measurements-new-btn {
+  border-radius: 12px;
+  background: var(--dd-navy);
+  border-color: var(--dd-navy);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.1rem;
+}
+
+.measurements-new-btn:hover,
+.measurements-new-btn:focus {
+  background: #122f52;
+  border-color: #122f52;
+  color: #ffffff;
+}
+
+.measurements-toolbar {
+  border-radius: 20px;
+  border: 1px solid #ebe6da;
+  box-shadow: var(--dd-shadow-soft);
+}
+
+.measurement-placeholder-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+}
+
+.measurement-placeholder-card h2 {
+  font-size: 1.03rem;
+  font-weight: 700;
+  color: var(--dd-navy);
+}
+
+.measurements-pagination-placeholder {
+  text-align: center;
+  color: #8a95a3;
+  font-size: 0.9rem;
+}

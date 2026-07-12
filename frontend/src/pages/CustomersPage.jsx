@@ -10,12 +10,11 @@ function CustomersPage() {
       <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
         <div>
           <h1 className="mb-1">Customers</h1>
-          <p className="mb-0">Manage customer records in a clean desktop workspace.</p>
         </div>
 
         <button type="button" className="btn customers-add-btn">
           <FiPlus className="me-2" />
-          Add Customer
+          New Customer
         </button>
       </div>
 
@@ -58,6 +57,10 @@ function CustomersPage() {
             <div className="placeholder-line w-100" />
           </CustomerCard>
         </div>
+      </div>
+
+      <div className="customers-pagination-placeholder mt-4">
+        Pagination placeholder
       </div>
     </section>
   )

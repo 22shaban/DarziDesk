@@ -33,3 +33,9 @@
   border: 1px solid #ebe6da;
   box-shadow: var(--dd-shadow-soft);
 }
+
+.customers-pagination-placeholder {
+  text-align: center;
+  color: #8a95a3;
+  font-size: 0.9rem;
+}

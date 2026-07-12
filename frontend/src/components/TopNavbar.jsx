@@ -1,7 +1,23 @@
 import { FiBell, FiChevronDown, FiMenu, FiPlus } from 'react-icons/fi'
+import { useLocation } from 'react-router-dom'
 import './TopNavbar.css'
 
-function TopNavbar({ onToggle, pageTitle = 'Dashboard' }) {
+const routeTitleMap = {
+  '/dashboard': 'Dashboard',
+  '/orders': 'Orders',
+  '/customers': 'Customers',
+  '/measurements': 'Measurements',
+  '/inventory': 'Fabric & Inventory',
+  '/employees': 'Employees',
+  '/invoices': 'Invoices',
+  '/reports': 'Reports',
+  '/settings': 'Settings',
+}
+
+function TopNavbar({ onToggle }) {
+  const location = useLocation()
+  const pageTitle = routeTitleMap[location.pathname] ?? 'Dashboard'
+
   return (
     <header className="top-navbar-shell px-4">
       <div className="top-navbar-left d-flex align-items-center gap-3">

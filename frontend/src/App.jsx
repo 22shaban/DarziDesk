@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import OrdersPage from './pages/OrdersPage'
 import CustomersPage from './pages/CustomersPage'
+import MeasurementsPage from './pages/MeasurementsPage'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/customers" element={<CustomersPage />} />
+        <Route path="/measurements" element={<MeasurementsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>

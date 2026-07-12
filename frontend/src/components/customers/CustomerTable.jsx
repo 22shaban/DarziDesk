@@ -1,4 +1,4 @@
-import EmptyState from './EmptyState'
+import CustomerEmptyState from './CustomerEmptyState'
 import './CustomerTable.css'
 
 const tableColumns = [
@@ -27,9 +27,9 @@ function CustomerTable() {
           <tbody>
             <tr>
               <td colSpan={tableColumns.length} className="customers-table-empty-cell">
-                <EmptyState
-                  title="No customers found."
-                  message='Click "Add Customer" to create your first customer.'
+                <CustomerEmptyState
+                  title="No customers yet"
+                  message="Click New Customer to add your first customer."
                 />
               </td>
             </tr>
