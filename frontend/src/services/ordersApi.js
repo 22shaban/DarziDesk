@@ -26,3 +26,25 @@ export async function createOrder(order) {
 
   return await response.json()
 }
+export async function deleteOrder(id){
+
+const response = await fetch(
+`http://127.0.0.1:5000/orders/${id}`,
+{
+method:"DELETE"
+}
+)
+
+
+if(!response.ok){
+
+throw new Error(
+"Failed to delete order"
+)
+
+}
+
+
+return await response.json()
+
+}
