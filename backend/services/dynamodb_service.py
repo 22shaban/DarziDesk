@@ -15,5 +15,15 @@ class DynamoDBService:
         self.table_name = table_name
 
     def put_order(self, item: dict[str, dict[str, str]]) -> Any:
-        """Insert a future order record into the Orders table."""
-        return self.client.put_item(TableName=self.table_name, Item=item)
+        """Insert a new order into the Orders table."""
+        return self.client.put_item(
+            TableName=self.table_name,
+            Item=item,
+        )
+
+    def get_orders(self) -> list[dict[str, Any]]:
+        """Return all orders from the Orders table."""
+        response = self.client.scan(
+            TableName=self.table_name,
+        )
+        return response.get("Items", [])
