@@ -1,9 +1,12 @@
 import { FiPlus } from 'react-icons/fi'
+import { useState } from 'react'
+import NewOrderModal from '../components/orders/NewOrderModal'
 import OrderTable from '../components/orders/OrderTable'
 import SearchBar from '../components/orders/SearchBar'
 import './OrdersPage.css'
 
 function OrdersPage() {
+    const [showModal, setShowModal] = useState(false)
   return (
     <section className="orders-page">
       <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
@@ -12,7 +15,11 @@ function OrdersPage() {
           <p className="mb-0">Manage order workflow in a clean desktop workspace.</p>
         </div>
 
-        <button type="button" className="btn orders-new-order-btn">
+        <button
+  type="button"
+  className="btn orders-new-order-btn"
+  onClick={() => setShowModal(true)}
+>
           <FiPlus className="me-2" />
           New Order
         </button>
@@ -47,6 +54,11 @@ function OrdersPage() {
       <div className="orders-pagination-placeholder mt-4">
         Pagination footer placeholder
       </div>
+      {showModal && (
+  <NewOrderModal
+    onClose={() => setShowModal(false)}
+  />
+)}
     </section>
   )
 }
