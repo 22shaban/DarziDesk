@@ -3,6 +3,7 @@ import EditOrderModal from './EditOrderModal'
 import EmptyState from './EmptyState'
 import './OrderTable.css'
 import { deleteOrder } from '../../services/ordersApi'
+import DeleteOrderModal from './DeleteOrderModal'
 
 const tableColumns = [
   'Order ID',
@@ -19,6 +20,7 @@ const tableColumns = [
 
 function OrderTable({orders, refresh}) {
     const [selectedOrder, setSelectedOrder] = useState(null)
+    const [deleteOrder, setDeleteOrder] = useState(null)
 
 
 async function handleDelete(id){
@@ -136,10 +138,10 @@ orders.map(order=>(
 
 
 <button
-className="btn btn-sm btn-outline-danger"
-onClick={()=>handleDelete(order.orderId)}
+  className="btn btn-sm btn-outline-danger"
+  onClick={() => setDeleteOrder(order)}
 >
-Delete
+  Delete
 </button>
 
 
@@ -164,6 +166,13 @@ Delete
     order={selectedOrder}
     onClose={() => setSelectedOrder(null)}
     onUpdated={refresh}
+  />
+)}
+{deleteOrder && (
+  <DeleteOrderModal
+    order={deleteOrder}
+    onClose={() => setDeleteOrder(null)}
+    onDeleted={refresh}
   />
 )}
 </div>
