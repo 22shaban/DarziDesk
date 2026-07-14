@@ -1,7 +1,8 @@
 import { useState } from 'react'
+
 import EmptyState from '../orders/EmptyState'
-
-
+import EditCustomerModal from './EditCustomerModal'
+import DeleteCustomerModal from './DeleteCustomerModal'
 
 import './CustomerTable.css'
 
@@ -53,21 +54,21 @@ function CustomerTable({ customers, refresh }) {
 
                   <td>{customer.address}</td>
 
-                <td>
-  <button
-    className="btn btn-sm btn-outline-primary me-2"
-    disabled
-  >
-    Edit
-  </button>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-outline-primary me-2"
+                      onClick={() => setSelectedCustomer(customer)}
+                    >
+                      Edit
+                    </button>
 
-  <button
-    className="btn btn-sm btn-outline-danger"
-    disabled
-  >
-    Delete
-  </button>
-</td>
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => setDeleteCustomer(customer)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))
             )}
@@ -75,7 +76,21 @@ function CustomerTable({ customers, refresh }) {
         </table>
       </div>
 
-     
+      {selectedCustomer && (
+        <EditCustomerModal
+          customer={selectedCustomer}
+          onClose={() => setSelectedCustomer(null)}
+          onUpdated={refresh}
+        />
+      )}
+
+      {deleteCustomer && (
+        <DeleteCustomerModal
+          customer={deleteCustomer}
+          onClose={() => setDeleteCustomer(null)}
+          onDeleted={refresh}
+        />
+      )}
     </div>
   )
 }
