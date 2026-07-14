@@ -1,87 +1,128 @@
 import { FiPlus } from 'react-icons/fi'
-import { useEffect,useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
 import { getOrders } from '../services/ordersApi'
+
 import NewOrderModal from '../components/orders/NewOrderModal'
 import OrderTable from '../components/orders/OrderTable'
 import SearchBar from '../components/orders/SearchBar'
 
 import './OrdersPage.css'
 
+const PAGE_SIZE = 5
+
 function OrdersPage() {
-    const [orders,setOrders]=useState([])
+  const [orders, setOrders] = useState([])
 
-
-async function loadOrders(){
-
-const data=await getOrders()
-
-setOrders(data)
-
-}
-
-
-useEffect(()=>{
-
-loadOrders()
-
-},[])
   const [showModal, setShowModal] = useState(false)
+
+  const [searchText, setSearchText] = useState('')
+
+  const [statusFilter, setStatusFilter] = useState('All')
+
+  const [currentPage, setCurrentPage] = useState(1)
+
+  async function loadOrders() {
+    try {
+      const data = await getOrders()
+
+      setOrders(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    loadOrders()
+  }, [])
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      const keyword = searchText.toLowerCase()
+
+      const matchesSearch =
+        order.customerName.toLowerCase().includes(keyword) ||
+        order.phone.toLowerCase().includes(keyword) ||
+        order.orderId.toLowerCase().includes(keyword)
+
+      const matchesStatus =
+        statusFilter === 'All'
+          ? true
+          : order.status === statusFilter
+
+      return matchesSearch && matchesStatus
+    })
+  }, [orders, searchText, statusFilter])
+
+  const totalPages = Math.ceil(filteredOrders.length / PAGE_SIZE) || 1
+
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  )
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchText, statusFilter])
 
   return (
     <section className="orders-page">
-
-      <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
 
         <div>
           <h1 className="mb-1">Orders</h1>
+
           <p className="mb-0">
             Manage order workflow in a clean desktop workspace.
           </p>
         </div>
 
         <button
-          type="button"
           className="btn orders-new-order-btn"
           onClick={() => setShowModal(true)}
         >
           <FiPlus className="me-2" />
+
           New Order
         </button>
 
       </div>
 
-
       <div className="orders-toolbar card p-3 mb-4">
 
-        <div className="row g-3 align-items-center">
+        <div className="row g-3 align-items-end">
 
-          <div className="col-5">
-            <SearchBar placeholder="Search orders" />
+          <div className="col-md-6">
+
+            <SearchBar
+              placeholder="Search customer, phone or order..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+
           </div>
 
+          <div className="col-md-3">
 
-          <div className="col-3 ms-auto">
-
-            <label
-              className="form-label mb-2 orders-filter-label"
-              htmlFor="statusFilter"
-            >
+            <label className="form-label">
               Status
             </label>
 
-
             <select
-              id="statusFilter"
-              className="form-select orders-filter-select"
+              className="form-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option>All Statuses</option>
-              <option>New</option>
-              <option>Measurements</option>
-              <option>Cutting</option>
-              <option>Stitching</option>
-              <option>Quality Check</option>
-              <option>Ready</option>
-              <option>Delivered</option>
+              <option value="All">All</option>
+
+              <option value="Pending">
+                Pending
+              </option>
+
+              <option value="Completed">
+                Completed
+              </option>
+
             </select>
 
           </div>
@@ -90,21 +131,48 @@ loadOrders()
 
       </div>
 
-
       <OrderTable
-orders={orders}
-refresh={loadOrders}
-/>
+        orders={paginatedOrders}
+        refresh={loadOrders}
+      />
 
+      <div className="orders-pagination-placeholder mt-4 d-flex justify-content-center align-items-center gap-3">
 
-      <div className="orders-pagination-placeholder mt-4">
-        Pagination footer placeholder
+        <button
+          className="btn btn-outline-secondary"
+          disabled={currentPage === 1}
+          onClick={() =>
+            setCurrentPage((page) => page - 1)
+          }
+        >
+          Previous
+        </button>
+
+        <span>
+
+          Page {currentPage} of {totalPages}
+
+        </span>
+
+        <button
+          className="btn btn-outline-secondary"
+          disabled={currentPage === totalPages}
+          onClick={() =>
+            setCurrentPage((page) => page + 1)
+          }
+        >
+          Next
+        </button>
+
       </div>
-
 
       {showModal && (
         <NewOrderModal
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false)
+
+            loadOrders()
+          }}
         />
       )}
 
