@@ -48,3 +48,18 @@ throw new Error(
 return await response.json()
 
 }
+export async function updateOrder(orderId, order) {
+  const response = await fetch(`http://127.0.0.1:5000/orders/${orderId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to update order')
+  }
+
+  return await response.json()
+}

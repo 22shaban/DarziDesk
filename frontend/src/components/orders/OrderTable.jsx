@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import EditOrderModal from './EditOrderModal'
 import EmptyState from './EmptyState'
 import './OrderTable.css'
 import { deleteOrder } from '../../services/ordersApi'
@@ -16,6 +18,7 @@ const tableColumns = [
 
 
 function OrderTable({orders, refresh}) {
+    const [selectedOrder, setSelectedOrder] = useState(null)
 
 
 async function handleDelete(id){
@@ -125,9 +128,10 @@ orders.map(order=>(
 <td>
 
 <button
-className="btn btn-sm btn-outline-primary me-2"
+  className="btn btn-sm btn-outline-primary me-2"
+  onClick={() => setSelectedOrder(order)}
 >
-Edit
+  Edit
 </button>
 
 
@@ -155,7 +159,13 @@ Delete
 
 </table>
 
-
+{selectedOrder && (
+  <EditOrderModal
+    order={selectedOrder}
+    onClose={() => setSelectedOrder(null)}
+    onUpdated={refresh}
+  />
+)}
 </div>
 
 )
