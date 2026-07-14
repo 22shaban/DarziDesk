@@ -1,24 +1,55 @@
-.customers-empty-state {
+.orders-table-card {
+  background: #ffffff;
+  border: 1px solid #ebe6da;
+  border-radius: 20px;
+  box-shadow: var(--dd-shadow-soft);
+  overflow: hidden;
+}
+
+.orders-table-card .table {
+  margin-bottom: 0;
+}
+
+.orders-table-card thead th {
+  background: #fbfaf7;
   color: var(--dd-navy);
-}
-
-.customers-empty-icon {
-  width: 64px;
-  height: 64px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  background: rgba(15, 39, 68, 0.08);
-  color: var(--dd-gold);
-  font-size: 2rem;
-}
-
-.customers-empty-state h3 {
-  font-size: 1.15rem;
+  font-size: 0.85rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1rem;
+  border-bottom: 1px solid #ebe6da;
+  white-space: nowrap;
 }
 
-.customers-empty-state p {
-  color: #5f6a76;
+.orders-table-card tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.orders-table-card tbody tr:hover {
+  background: #faf8f3;
+}
+
+.orders-table-empty-cell {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.btn-outline-primary,
+.btn-outline-danger {
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-outline-primary {
+  min-width: 70px;
+}
+
+.btn-outline-danger {
+  min-width: 70px;
 }

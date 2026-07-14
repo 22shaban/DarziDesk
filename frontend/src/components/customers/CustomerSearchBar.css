@@ -1,0 +1,15 @@
+.orders-search-bar .input-group-text {
+  background: #ffffff;
+  border-right: 0;
+  color: #6b7280;
+}
+
+.orders-search-bar .form-control {
+  border-left: 0;
+  box-shadow: none;
+}
+
+.orders-search-bar .form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}

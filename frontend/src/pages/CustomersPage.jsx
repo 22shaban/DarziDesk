@@ -1,67 +1,53 @@
-import { FiPlus } from 'react-icons/fi'
-import CustomerCard from '../components/customers/CustomerCard'
-import CustomerSearch from '../components/customers/CustomerSearch'
+import { useEffect, useMemo, useState } from 'react'
+import { getCustomers } from '../services/customersApi'
+
 import CustomerTable from '../components/customers/CustomerTable'
+import CustomerSearchBar from '../components/customers/CustomerSearchBar'
+
 import './CustomersPage.css'
 
 function CustomersPage() {
+  const [customers, setCustomers] = useState([])
+  const [search, setSearch] = useState('')
+
+  async function loadCustomers() {
+    const data = await getCustomers()
+    setCustomers(data)
+  }
+
+  useEffect(() => {
+    loadCustomers()
+  }, [])
+
+  const filteredCustomers = useMemo(() => {
+    const term = search.toLowerCase()
+
+    return customers.filter((customer) => {
+      return (
+        customer.customerName.toLowerCase().includes(term) ||
+        customer.phone.toLowerCase().includes(term) ||
+        customer.email.toLowerCase().includes(term)
+      )
+    })
+  }, [customers, search])
+
   return (
-    <section className="customers-page">
-      <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+    <section className="orders-page">
+      <div className="d-flex align-items-center justify-content-between mb-4">
         <div>
-          <h1 className="mb-1">Customers</h1>
-        </div>
-
-        <button type="button" className="btn customers-add-btn">
-          <FiPlus className="me-2" />
-          New Customer
-        </button>
-      </div>
-
-      <div className="customers-toolbar card p-3 mb-4">
-        <div className="row g-3 align-items-center">
-          <div className="col-6">
-            <CustomerSearch />
-          </div>
+          <h1>Customers</h1>
+          <p>Manage your tailor shop customers.</p>
         </div>
       </div>
 
-      <CustomerTable />
-
-      <div className="row g-3 mt-4">
-        <div className="col-3">
-          <CustomerCard title="Customer Details">
-            <div className="placeholder-line w-75" />
-            <div className="placeholder-line w-50" />
-            <div className="placeholder-line w-100" />
-          </CustomerCard>
-        </div>
-        <div className="col-3">
-          <CustomerCard title="Measurements">
-            <div className="placeholder-line w-75" />
-            <div className="placeholder-line w-50" />
-            <div className="placeholder-line w-100" />
-          </CustomerCard>
-        </div>
-        <div className="col-3">
-          <CustomerCard title="Customer Preferences">
-            <div className="placeholder-line w-75" />
-            <div className="placeholder-line w-50" />
-            <div className="placeholder-line w-100" />
-          </CustomerCard>
-        </div>
-        <div className="col-3">
-          <CustomerCard title="Customer History">
-            <div className="placeholder-line w-75" />
-            <div className="placeholder-line w-50" />
-            <div className="placeholder-line w-100" />
-          </CustomerCard>
-        </div>
+      <div className="orders-toolbar card p-3 mb-4">
+        <CustomerSearchBar
+          value={search}
+          onChange={setSearch}
+        />
       </div>
 
-      <div className="customers-pagination-placeholder mt-4">
-        Pagination placeholder
-      </div>
+      <CustomerTable customers={filteredCustomers} />
     </section>
   )
 }
