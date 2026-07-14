@@ -1,4 +1,4 @@
-"""Orders route placeholder for future order creation workflows."""
+"""Orders route."""
 
 from __future__ import annotations
 
@@ -14,14 +14,22 @@ orders_bp = Blueprint("orders", __name__, url_prefix="/orders")
 
 
 @orders_bp.post("")
-def create_order() -> tuple[dict[str, object], int]:
-    """Create a new order record in DynamoDB."""
+def create_order():
     payload = request.get_json(silent=True) or {}
 
     customer_name = payload.get("customerName")
     phone = payload.get("phone")
     garment_type = payload.get("garmentType")
+
     status = payload.get("status") or "Pending"
+
+    delivery_date = payload.get("deliveryDate") or ""
+
+    assigned_tailor = payload.get("assignedTailor") or ""
+
+    advance = str(payload.get("advance") or "0")
+
+    remaining = str(payload.get("remaining") or "0")
 
     missing_fields = [
         field
@@ -41,18 +49,28 @@ def create_order() -> tuple[dict[str, object], int]:
         )
 
     order_id = str(uuid4())
-    created_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+    created_at = (
+        datetime.now(timezone.utc)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
 
     item = {
         "orderId": {"S": order_id},
-        "customerName": {"S": str(customer_name).strip()},
-        "phone": {"S": str(phone).strip()},
-        "garmentType": {"S": str(garment_type).strip()},
-        "status": {"S": str(status).strip() or "Pending"},
+        "customerName": {"S": customer_name.strip()},
+        "phone": {"S": phone.strip()},
+        "garmentType": {"S": garment_type.strip()},
+        "status": {"S": status},
         "createdAt": {"S": created_at},
+        "deliveryDate": {"S": delivery_date},
+        "assignedTailor": {"S": assigned_tailor},
+        "advance": {"S": advance},
+        "remaining": {"S": remaining},
     }
 
     service = DynamoDBService()
+
     service.put_order(item)
 
     return json_response(
@@ -63,9 +81,9 @@ def create_order() -> tuple[dict[str, object], int]:
 
 
 @orders_bp.get("")
-def get_orders() -> tuple[dict[str, object], int]:
-    """Return all orders."""
+def get_orders():
     service = DynamoDBService()
+
     items = service.get_orders()
 
     orders = []
@@ -79,20 +97,28 @@ def get_orders() -> tuple[dict[str, object], int]:
                 "garmentType": item["garmentType"]["S"],
                 "status": item["status"]["S"],
                 "createdAt": item["createdAt"]["S"],
+                "deliveryDate": item.get("deliveryDate", {}).get("S", ""),
+                "assignedTailor": item.get("assignedTailor", {}).get("S", ""),
+                "advance": item.get("advance", {}).get("S", "0"),
+                "remaining": item.get("remaining", {}).get("S", "0"),
             }
         )
 
-    orders.sort(key=lambda x: x["createdAt"], reverse=True)
+    orders.sort(
+        key=lambda x: x["createdAt"],
+        reverse=True,
+    )
 
     return json_response(
         "Orders retrieved successfully",
         data=orders,
     )
 
+
 @orders_bp.get("/<order_id>")
-def get_order(order_id: str) -> tuple[dict[str, object], int]:
-    """Return one order by ID."""
+def get_order(order_id: str):
     service = DynamoDBService()
+
     item = service.get_order(order_id)
 
     if not item:
@@ -108,6 +134,10 @@ def get_order(order_id: str) -> tuple[dict[str, object], int]:
         "garmentType": item["garmentType"]["S"],
         "status": item["status"]["S"],
         "createdAt": item["createdAt"]["S"],
+        "deliveryDate": item.get("deliveryDate", {}).get("S", ""),
+        "assignedTailor": item.get("assignedTailor", {}).get("S", ""),
+        "advance": item.get("advance", {}).get("S", "0"),
+        "remaining": item.get("remaining", {}).get("S", "0"),
     }
 
     return json_response(
@@ -115,15 +145,23 @@ def get_order(order_id: str) -> tuple[dict[str, object], int]:
         data=order,
     )
 
+
 @orders_bp.put("/<order_id>")
-def update_order(order_id: str) -> tuple[dict[str, object], int]:
-    """Update an existing order."""
+def update_order(order_id: str):
     payload = request.get_json(silent=True) or {}
 
     customer_name = payload.get("customerName")
     phone = payload.get("phone")
     garment_type = payload.get("garmentType")
     status = payload.get("status")
+
+    delivery_date = payload.get("deliveryDate") or ""
+
+    assigned_tailor = payload.get("assignedTailor") or ""
+
+    advance = str(payload.get("advance") or "0")
+
+    remaining = str(payload.get("remaining") or "0")
 
     missing_fields = [
         field
@@ -153,19 +191,23 @@ def update_order(order_id: str) -> tuple[dict[str, object], int]:
 
     service.update_order(
         order_id=order_id,
-        customer_name=str(customer_name).strip(),
-        phone=str(phone).strip(),
-        garment_type=str(garment_type).strip(),
-        status=str(status).strip(),
+        customer_name=customer_name.strip(),
+        phone=phone.strip(),
+        garment_type=garment_type.strip(),
+        status=status.strip(),
+        delivery_date=delivery_date,
+        assigned_tailor=assigned_tailor,
+        advance=advance,
+        remaining=remaining,
     )
 
     return json_response(
         "Order updated successfully",
     )
 
+
 @orders_bp.delete("/<order_id>")
-def delete_order(order_id: str) -> tuple[dict[str, object], int]:
-    """Delete an order."""
+def delete_order(order_id: str):
     service = DynamoDBService()
 
     if service.get_order(order_id) is None:
