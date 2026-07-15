@@ -117,3 +117,24 @@ def get_inventory():
         "Inventory retrieved successfully",
         data=inventory,
     )
+@inventory_bp.put("/<inventory_id>")
+def update_inventory(inventory_id):
+    payload = request.get_json(silent=True) or {}
+
+    service = DynamoDBService()
+
+    service.update_inventory(
+        inventory_id=inventory_id,
+        fabric_name=payload["fabricName"],
+        category=payload["category"],
+        unit=payload["unit"],
+        quantity=payload["quantity"],
+        cost_price=payload["costPrice"],
+        selling_price=payload["sellingPrice"],
+        supplier=payload["supplier"],
+        status=payload["status"],
+    )
+
+    return json_response(
+        "Inventory updated successfully",
+    )
