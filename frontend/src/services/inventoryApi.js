@@ -27,3 +27,19 @@ export async function createInventory(data) {
 
   return response.json();
 }
+
+export async function updateInventory(inventoryId, data) {
+  const response = await fetch(`${API_URL}/${inventoryId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update inventory");
+  }
+
+  return response.json();
+}
