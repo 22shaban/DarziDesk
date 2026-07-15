@@ -309,16 +309,17 @@ ExpressionAttributeNames={
                     "S": employee_id,
                 }
             },
-            UpdateExpression="""
-                SET employeeName=:employeeName,
-                    phone=:phone,
-                    role=:role,
-                    salary=:salary,
-                    #status=:status
-            """,
-            ExpressionAttributeNames={
-                "#status": "status",
-            },
+          UpdateExpression="""
+    SET employeeName=:employeeName,
+        phone=:phone,
+        #role=:role,
+        salary=:salary,
+        #status=:status
+""",
+           ExpressionAttributeNames={
+    "#status": "status",
+    "#role": "role",
+},
             ExpressionAttributeValues={
                 ":employeeName": {"S": str(employee_name)},
                 ":phone": {"S": str(phone)},

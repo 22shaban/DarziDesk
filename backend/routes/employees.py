@@ -95,3 +95,30 @@ def create_employee():
         "employeeId": employee_id,
     },
 )
+@employees_bp.put("/<employee_id>")
+def update_employee(employee_id):
+    payload = request.get_json(silent=True) or {}
+
+    service = DynamoDBService()
+
+    service.update_employee(
+        employee_id=employee_id,
+        employee_name=payload["employeeName"],
+        phone=payload["phone"],
+        role=payload["role"],
+        salary=payload["salary"],
+        status=payload["status"],
+    )
+
+    return json_response(
+        "Employee updated successfully",
+    )
+@employees_bp.delete("/<employee_id>")
+def delete_employee(employee_id):
+    service = DynamoDBService()
+
+    service.delete_employee(employee_id)
+
+    return json_response(
+        "Employee deleted successfully",
+    )
