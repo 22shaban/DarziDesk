@@ -338,3 +338,64 @@ ExpressionAttributeNames={
                 }
             },
         )
+    
+    # ----------------------------
+    # Invoices
+    # ----------------------------
+
+    def put_invoice(self, item):
+        return self.client.put_item(
+            TableName="Invoices",
+            Item=item,
+        )
+
+    def get_invoices(self):
+        response = self.client.scan(
+            TableName="Invoices",
+        )
+        return response.get("Items", [])
+
+    def update_invoice(
+        self,
+        invoice_id,
+        order_id,
+        customer_name,
+        total_amount,
+        advance_paid,
+        remaining_amount,
+        payment_status,
+    ):
+        return self.client.update_item(
+            TableName="Invoices",
+            Key={
+                "invoiceId": {
+                    "S": invoice_id,
+                }
+            },
+            UpdateExpression="""
+                SET orderId=:orderId,
+                    customerName=:customerName,
+                    totalAmount=:totalAmount,
+                    advancePaid=:advancePaid,
+                    remainingAmount=:remainingAmount,
+                    paymentStatus=:paymentStatus
+            """,
+            ExpressionAttributeValues={
+                ":orderId": {"S": str(order_id)},
+                ":customerName": {"S": str(customer_name)},
+                ":totalAmount": {"N": str(total_amount)},
+                ":advancePaid": {"N": str(advance_paid)},
+                ":remainingAmount": {"N": str(remaining_amount)},
+                ":paymentStatus": {"S": str(payment_status)},
+            },
+        )
+
+    def delete_invoice(self, invoice_id):
+        return self.client.delete_item(
+            TableName="Invoices",
+            Key={
+                "invoiceId": {
+                    "S": invoice_id,
+                }
+            },
+        )
