@@ -240,19 +240,20 @@ class DynamoDBService:
             Key={
                 "inventoryId": {"S": inventory_id},
             },
-            UpdateExpression="""
-                SET fabricName=:fabricName,
-                    category=:category,
-                    unit=:unit,
-                    quantity=:quantity,
-                    costPrice=:costPrice,
-                    sellingPrice=:sellingPrice,
-                    supplier=:supplier,
-                    #status=:status
-            """,
-            ExpressionAttributeNames={
-                "#status": "status",
-            },
+          UpdateExpression="""
+    SET fabricName=:fabricName,
+        category=:category,
+        #unit=:unit,
+        quantity=:quantity,
+        costPrice=:costPrice,
+        sellingPrice=:sellingPrice,
+        supplier=:supplier,
+        #status=:status
+""",
+ExpressionAttributeNames={
+    "#status": "status",
+    "#unit": "unit",
+},
             ExpressionAttributeValues={
                 ":fabricName": {"S": str(fabric_name)},
                 ":category": {"S": str(category)},

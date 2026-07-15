@@ -39,7 +39,10 @@ function InventoryPage() {
         </button>
       </div>
 
-      <InventoryTable inventory={inventory} />
+      <InventoryTable
+  inventory={inventory}
+  onRefresh={loadInventory}
+/>
 
       {showModal && (
         <NewInventoryModal
