@@ -213,3 +213,62 @@ class DynamoDBService:
             TableName="Inventory",
         )
         return response.get("Items", [])
+
+    def get_inventory_item(self, inventory_id):
+        response = self.client.get_item(
+            TableName="Inventory",
+            Key={
+                "inventoryId": {"S": inventory_id},
+            },
+        )
+        return response.get("Item")
+
+    def update_inventory(
+        self,
+        inventory_id,
+        fabric_name,
+        category,
+        unit,
+        quantity,
+        cost_price,
+        selling_price,
+        supplier,
+        status,
+    ):
+        return self.client.update_item(
+            TableName="Inventory",
+            Key={
+                "inventoryId": {"S": inventory_id},
+            },
+            UpdateExpression="""
+                SET fabricName=:fabricName,
+                    category=:category,
+                    unit=:unit,
+                    quantity=:quantity,
+                    costPrice=:costPrice,
+                    sellingPrice=:sellingPrice,
+                    supplier=:supplier,
+                    #status=:status
+            """,
+            ExpressionAttributeNames={
+                "#status": "status",
+            },
+            ExpressionAttributeValues={
+                ":fabricName": {"S": str(fabric_name)},
+                ":category": {"S": str(category)},
+                ":unit": {"S": str(unit)},
+                ":quantity": {"N": str(quantity)},
+                ":costPrice": {"N": str(cost_price)},
+                ":sellingPrice": {"N": str(selling_price)},
+                ":supplier": {"S": str(supplier)},
+                ":status": {"S": str(status)},
+            },
+        )
+
+    def delete_inventory(self, inventory_id):
+        return self.client.delete_item(
+            TableName="Inventory",
+            Key={
+                "inventoryId": {"S": inventory_id},
+            },
+        )
