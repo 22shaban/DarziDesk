@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from flask import Blueprint
+from datetime import datetime, timezone
+from uuid import uuid4
+
+from flask import Blueprint, request
 
 from services.dynamodb_service import DynamoDBService
 from utils.response import json_response
@@ -38,3 +41,57 @@ def get_employees():
         "Employees fetched successfully",
         data=employees,
     )
+@employees_bp.post("")
+def create_employee():
+    payload = request.get_json(silent=True) or {}
+
+    employee_name = payload.get("employeeName")
+    phone = payload.get("phone")
+    role = payload.get("role")
+    salary = payload.get("salary")
+    status = payload.get("status")
+
+    missing_fields = [
+        field
+        for field, value in (
+            ("employeeName", employee_name),
+            ("phone", phone),
+            ("role", role),
+            ("salary", salary),
+            ("status", status),
+        )
+        if value in (None, "")
+    ]
+
+    if missing_fields:
+      return json_response(
+    "Missing required fields",
+    status_code=400,
+    data={"missing": missing_fields},
+)
+
+    employee_id = str(uuid4())
+
+    service = DynamoDBService()
+
+    service.put_employee(
+        {
+            "employeeId": {"S": employee_id},
+            "employeeName": {"S": employee_name},
+            "phone": {"S": phone},
+            "role": {"S": role},
+            "salary": {"N": str(salary)},
+            "status": {"S": status},
+            "createdAt": {
+                "S": datetime.now(timezone.utc).isoformat(),
+            },
+        }
+    )
+
+    return json_response(
+    "Employee created successfully",
+    status_code=201,
+    data={
+        "employeeId": employee_id,
+    },
+)
