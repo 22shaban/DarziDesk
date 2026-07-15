@@ -138,3 +138,12 @@ def update_inventory(inventory_id):
     return json_response(
         "Inventory updated successfully",
     )
+@inventory_bp.delete("/<inventory_id>")
+def delete_inventory(inventory_id):
+    service = DynamoDBService()
+
+    service.delete_inventory(inventory_id)
+
+    return json_response(
+        "Inventory item deleted successfully",
+    )

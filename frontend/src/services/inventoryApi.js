@@ -43,3 +43,14 @@ export async function updateInventory(inventoryId, data) {
 
   return response.json();
 }
+export async function deleteInventory(inventoryId) {
+  const response = await fetch(`${API_URL}/${inventoryId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete inventory");
+  }
+
+  return response.json();
+}

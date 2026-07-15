@@ -235,6 +235,7 @@ class DynamoDBService:
         supplier,
         status,
     ):
+        
         return self.client.update_item(
             TableName="Inventory",
             Key={
@@ -270,6 +271,8 @@ ExpressionAttributeNames={
         return self.client.delete_item(
             TableName="Inventory",
             Key={
-                "inventoryId": {"S": inventory_id},
+                "inventoryId": {
+                    "S": inventory_id,
+                }
             },
         )

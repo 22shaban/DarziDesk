@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import EmptyState from '../orders/EmptyState'
 import EditInventoryModal from './EditInventoryModal'
-import { updateInventory } from '../../services/inventoryApi'
+import {
+  updateInventory,
+  deleteInventory,
+} from '../../services/inventoryApi'
 import './InventoryTable.css'
 
 const columns = [
@@ -36,6 +39,24 @@ function InventoryTable({ inventory, onRefresh }) {
       alert('Failed to update inventory.')
     }
   }
+  async function handleDelete(inventoryId) {
+  const confirmed = window.confirm(
+    'Are you sure you want to delete this inventory item?'
+  )
+
+  if (!confirmed) return
+
+  try {
+    await deleteInventory(inventoryId)
+
+    if (onRefresh) {
+      await onRefresh()
+    }
+  } catch (error) {
+    console.error(error)
+    alert('Failed to delete inventory.')
+  }
+}
 
   return (
     <>
@@ -87,10 +108,11 @@ function InventoryTable({ inventory, onRefresh }) {
                     </button>
 
                     <button
-                      className="btn btn-sm btn-outline-danger"
-                    >
-                      Delete
-                    </button>
+  className="btn btn-sm btn-outline-danger"
+  onClick={() => handleDelete(item.inventoryId)}
+>
+  Delete
+</button>
                   </td>
                 </tr>
               ))
