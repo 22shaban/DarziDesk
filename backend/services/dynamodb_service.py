@@ -276,3 +276,19 @@ ExpressionAttributeNames={
                 }
             },
         )
+    
+    # ----------------------------
+    # Employees
+    # ----------------------------
+
+    def put_employee(self, item):
+        return self.client.put_item(
+            TableName="Employees",
+            Item=item,
+        )
+
+    def get_employees(self):
+        response = self.client.scan(
+            TableName="Employees",
+        )
+        return response.get("Items", [])    
