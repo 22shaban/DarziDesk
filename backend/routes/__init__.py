@@ -8,6 +8,7 @@ from .inventory import inventory_bp
 from .measurements import measurements_bp
 from .orders import orders_bp
 from .version import version_blueprint
+from .employees import employees_bp
 
 
 def register_blueprints(app: Flask) -> None:
@@ -19,3 +20,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(customers_bp)
     app.register_blueprint(measurements_bp)
     app.register_blueprint(inventory_bp)
+    app.register_blueprint(employees_bp)
