@@ -292,3 +292,48 @@ ExpressionAttributeNames={
             TableName="Employees",
         )
         return response.get("Items", [])    
+    
+    def update_employee(
+        self,
+        employee_id,
+        employee_name,
+        phone,
+        role,
+        salary,
+        status,
+    ):
+        return self.client.update_item(
+            TableName="Employees",
+            Key={
+                "employeeId": {
+                    "S": employee_id,
+                }
+            },
+            UpdateExpression="""
+                SET employeeName=:employeeName,
+                    phone=:phone,
+                    role=:role,
+                    salary=:salary,
+                    #status=:status
+            """,
+            ExpressionAttributeNames={
+                "#status": "status",
+            },
+            ExpressionAttributeValues={
+                ":employeeName": {"S": str(employee_name)},
+                ":phone": {"S": str(phone)},
+                ":role": {"S": str(role)},
+                ":salary": {"N": str(salary)},
+                ":status": {"S": str(status)},
+            },
+        )
+
+    def delete_employee(self, employee_id):
+        return self.client.delete_item(
+            TableName="Employees",
+            Key={
+                "employeeId": {
+                    "S": employee_id,
+                }
+            },
+        )
