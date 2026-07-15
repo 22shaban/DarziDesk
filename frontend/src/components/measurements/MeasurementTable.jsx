@@ -1,34 +1,98 @@
-import MeasurementEmptyState from './MeasurementEmptyState'
+import { useState } from 'react'
+
+import EmptyState from '../orders/EmptyState'
+import EditMeasurementModal from './EditMeasurementModal'
+import DeleteMeasurementModal from './DeleteMeasurementModal'
+
 import './MeasurementTable.css'
 
-const tableColumns = ['Customer', 'Garment', 'Last Updated', 'Actions']
+const columns = [
+  'Customer',
+  'Phone',
+  'Garment',
+  'Chest',
+  'Waist',
+  'Shoulder',
+  'Sleeve',
+  'Neck',
+  'Length',
+  'Actions',
+]
 
-function MeasurementTable() {
+function MeasurementTable({ measurements, refresh }) {
+  const [selectedMeasurement, setSelectedMeasurement] = useState(null)
+  const [deleteMeasurementData, setDeleteMeasurementData] = useState(null)
+
   return (
     <div className="measurements-table-card">
-      <div className="table-responsive">
-        <table className="table align-middle mb-0">
-          <thead>
+      <table className="table align-middle mb-0">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column}>{column}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {measurements.length === 0 ? (
             <tr>
-              {tableColumns.map((column) => (
-                <th key={column} scope="col">
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan={tableColumns.length} className="measurements-table-empty-cell">
-                <MeasurementEmptyState
-                  title="No measurements yet"
-                  message="Click New Measurement to create your first measurement."
+              <td colSpan="10">
+                <EmptyState
+                  title="No measurements found."
+                  message='Click "New Measurement" to create your first measurement.'
                 />
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+          ) : (
+            measurements.map((measurement) => (
+              <tr key={measurement.measurementId}>
+                <td>{measurement.customerName}</td>
+                <td>{measurement.phone}</td>
+                <td>{measurement.garmentType}</td>
+                <td>{measurement.chest || '-'}</td>
+                <td>{measurement.waist || '-'}</td>
+                <td>{measurement.shoulder || '-'}</td>
+                <td>{measurement.sleeve || '-'}</td>
+                <td>{measurement.neck || '-'}</td>
+                <td>{measurement.length || '-'}</td>
+
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline-primary me-2"
+                    onClick={() => setSelectedMeasurement(measurement)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => setDeleteMeasurementData(measurement)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {selectedMeasurement && (
+        <EditMeasurementModal
+          measurement={selectedMeasurement}
+          onClose={() => setSelectedMeasurement(null)}
+          onUpdated={refresh}
+        />
+      )}
+
+      {deleteMeasurementData && (
+        <DeleteMeasurementModal
+          measurement={deleteMeasurementData}
+          onClose={() => setDeleteMeasurementData(null)}
+          onDeleted={refresh}
+        />
+      )}
     </div>
   )
 }

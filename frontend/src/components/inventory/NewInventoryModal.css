@@ -1,0 +1,23 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-card {
+  width: 720px;
+  max-width: 95%;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.15);
+}
+
+.modal-card h2 {
+  margin-bottom: 20px;
+  color: var(--dd-navy);
+}

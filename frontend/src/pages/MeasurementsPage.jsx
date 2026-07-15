@@ -1,58 +1,65 @@
+import { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
-import MeasurementSearch from '../components/measurements/MeasurementSearch'
+
+import { getMeasurements } from '../services/measurementsApi'
+
 import MeasurementTable from '../components/measurements/MeasurementTable'
+import NewMeasurementModal from '../components/measurements/NewMeasurementModal'
+
 import './MeasurementsPage.css'
 
 function MeasurementsPage() {
+  const [measurements, setMeasurements] = useState([])
+  const [showModal, setShowModal] = useState(false)
+
+  async function loadMeasurements() {
+    try {
+      const data = await getMeasurements()
+      setMeasurements(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    loadMeasurements()
+  }, [])
+
   return (
     <section className="measurements-page">
-      <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 className="mb-1">Measurements</h1>
+          <h1>Measurements</h1>
+
+          <p className="mb-0">
+            Manage customer body measurements.
+          </p>
         </div>
 
-        <button type="button" className="btn measurements-new-btn">
+        <button
+          className="btn measurements-new-btn"
+          onClick={() => setShowModal(true)}
+        >
           <FiPlus className="me-2" />
           New Measurement
         </button>
       </div>
 
-      <div className="measurements-toolbar card p-3 mb-4">
-        <div className="row g-3 align-items-center">
-          <div className="col-6">
-            <MeasurementSearch />
-          </div>
-        </div>
+      <MeasurementTable
+        measurements={measurements}
+        refresh={loadMeasurements}
+      />
+
+      <div className="orders-pagination-placeholder mt-4">
+        Page 1 of 1
       </div>
 
-      <MeasurementTable />
-
-      <div className="row g-3 mt-4">
-        <div className="col-3">
-          <article className="measurement-placeholder-card p-3">
-            <h2 className="mb-0">Shirt</h2>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="measurement-placeholder-card p-3">
-            <h2 className="mb-0">Suit</h2>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="measurement-placeholder-card p-3">
-            <h2 className="mb-0">Blazer</h2>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="measurement-placeholder-card p-3">
-            <h2 className="mb-0">Kurta</h2>
-          </article>
-        </div>
-      </div>
-
-      <div className="measurements-pagination-placeholder mt-4">
-        Pagination placeholder
-      </div>
+      {showModal && (
+        <NewMeasurementModal
+          onClose={() => setShowModal(false)}
+          onCreated={loadMeasurements}
+        />
+      )}
     </section>
   )
 }

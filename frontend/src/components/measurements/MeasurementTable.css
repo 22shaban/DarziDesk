@@ -16,12 +16,20 @@
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 1rem 1rem;
+  padding: 1rem;
   border-bottom: 1px solid #ebe6da;
   white-space: nowrap;
 }
 
-.measurements-table-empty-cell {
-  padding: 0;
-  border-bottom: 0;
+.measurements-table-card tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.measurements-table-card tbody tr:hover {
+  background: #faf8f3;
+}
+
+.measurements-table-card .btn {
+  border-radius: 10px;
 }

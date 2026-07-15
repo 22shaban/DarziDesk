@@ -1,41 +1,77 @@
-import InventoryEmptyState from './InventoryEmptyState'
+import EmptyState from '../orders/EmptyState'
 import './InventoryTable.css'
 
-const tableColumns = [
-  'Fabric Name',
-  'Color',
-  'Available Quantity',
-  'Inventory Value',
-  'Low Stock',
+const columns = [
+  'Fabric',
+  'Category',
+  'Unit',
+  'Quantity',
+  'Cost',
+  'Selling',
+  'Supplier',
+  'Status',
   'Actions',
 ]
 
-function InventoryTable() {
+function InventoryTable({ inventory }) {
   return (
     <div className="inventory-table-card">
-      <div className="table-responsive">
-        <table className="table align-middle mb-0">
-          <thead>
+      <table className="table align-middle mb-0">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column}>{column}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {inventory.length === 0 ? (
             <tr>
-              {tableColumns.map((column) => (
-                <th key={column} scope="col">
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan={tableColumns.length} className="inventory-table-empty-cell">
-                <InventoryEmptyState
-                  title="No fabrics in inventory"
+              <td colSpan="9">
+                <EmptyState
+                  title="No inventory found."
                   message='Click "Add Fabric" to create your first inventory item.'
                 />
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+          ) : (
+            inventory.map((item) => (
+              <tr key={item.inventoryId}>
+                <td>{item.fabricName}</td>
+
+                <td>{item.category}</td>
+
+                <td>{item.unit}</td>
+
+                <td>{item.quantity}</td>
+
+                <td>₹{item.costPrice}</td>
+
+                <td>₹{item.sellingPrice}</td>
+
+                <td>{item.supplier}</td>
+
+                <td>{item.status}</td>
+
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline-primary me-2"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   )
 }

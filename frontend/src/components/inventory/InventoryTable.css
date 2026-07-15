@@ -16,12 +16,12 @@
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 1rem 1rem;
+  padding: 1rem;
   border-bottom: 1px solid #ebe6da;
   white-space: nowrap;
 }
 
-.inventory-table-empty-cell {
-  padding: 0;
-  border-bottom: 0;
+.inventory-table-card tbody td {
+  padding: 1rem;
+  vertical-align: middle;
 }

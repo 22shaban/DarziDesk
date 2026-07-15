@@ -8,7 +8,11 @@
   color: var(--dd-navy);
 }
 
-.inventory-add-btn {
+.inventory-page p {
+  color: #5f6a76;
+}
+
+.inventory-new-btn {
   border-radius: 12px;
   background: var(--dd-navy);
   border-color: var(--dd-navy);
@@ -17,51 +21,9 @@
   padding: 0.75rem 1.1rem;
 }
 
-.inventory-add-btn:hover,
-.inventory-add-btn:focus {
+.inventory-new-btn:hover,
+.inventory-new-btn:focus {
   background: #122f52;
   border-color: #122f52;
   color: #ffffff;
-}
-
-.inventory-toolbar {
-  border-radius: 20px;
-  border: 1px solid #ebe6da;
-  box-shadow: var(--dd-shadow-soft);
-}
-
-.inventory-filter-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--dd-navy);
-}
-
-.inventory-filter-select {
-  border-color: #e5dfd2;
-  border-radius: 12px;
-  box-shadow: none;
-}
-
-.inventory-summary-card {
-  background: #ffffff;
-  border: 1px solid #ebe6da;
-  border-radius: 20px;
-  box-shadow: var(--dd-shadow-soft);
-  min-height: 92px;
-}
-
-.inventory-summary-card h2 {
-  font-size: 1.03rem;
-  font-weight: 700;
-  color: var(--dd-navy);
-}
-
-.inventory-summary-card p {
-  color: #5f6a76;
-}
-
-.inventory-pagination-placeholder {
-  text-align: center;
-  color: #8a95a3;
-  font-size: 0.9rem;
 }
