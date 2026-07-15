@@ -9,7 +9,7 @@ from .measurements import measurements_bp
 from .orders import orders_bp
 from .version import version_blueprint
 from .employees import employees_bp
-
+from .invoices import invoices_bp
 
 def register_blueprints(app: Flask) -> None:
     """Register all API blueprints on the Flask application."""
@@ -21,3 +21,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(measurements_bp)
     app.register_blueprint(inventory_bp)
     app.register_blueprint(employees_bp)
+    app.register_blueprint(invoices_bp)
