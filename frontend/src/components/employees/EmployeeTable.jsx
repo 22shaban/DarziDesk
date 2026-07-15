@@ -1,43 +1,76 @@
-import EmployeeEmptyState from './EmployeeEmptyState'
-import './EmployeeTable.css'
+import EmptyState from "../orders/EmptyState";
+import "./EmployeeTable.css";
 
-const tableColumns = [
-  'Employee Name',
-  'Role',
-  'Phone',
-  'Status',
-  'Assigned Orders',
-  'Actions',
-]
+const columns = [
+  "Employee",
+  "Phone",
+  "Role",
+  "Salary",
+  "Status",
+  "Actions",
+];
 
-function EmployeeTable() {
+function EmployeeTable({
+  employees,
+  onEdit,
+  onDelete,
+}) {
   return (
     <div className="employee-table-card">
-      <div className="table-responsive">
-        <table className="table align-middle mb-0">
-          <thead>
+      <table className="table align-middle mb-0">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column}>{column}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {employees.length === 0 ? (
             <tr>
-              {tableColumns.map((column) => (
-                <th key={column} scope="col">
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan={tableColumns.length} className="employee-table-empty-cell">
-                <EmployeeEmptyState
+              <td colSpan="6">
+                <EmptyState
                   title="No employees found."
-                  message='Click "Add Employee" to add your first employee.'
+                  message='Click "Add Employee" to create your first employee.'
                 />
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+          ) : (
+            employees.map((employee) => (
+              <tr key={employee.employeeId}>
+                <td>{employee.employeeName}</td>
+
+                <td>{employee.phone}</td>
+
+                <td>{employee.role}</td>
+
+                <td>₹{employee.salary}</td>
+
+                <td>{employee.status}</td>
+
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline-primary me-2"
+                    onClick={() => onEdit(employee)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => onDelete(employee)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }
 
-export default EmployeeTable
+export default EmployeeTable;
