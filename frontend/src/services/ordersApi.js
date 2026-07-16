@@ -63,3 +63,16 @@ export async function updateOrder(orderId, order) {
 
   return await response.json()
 }
+export async function getOrder(orderId) {
+  const response = await fetch(
+    `http://127.0.0.1:5000/orders/${orderId}`
+  )
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch order")
+  }
+
+  const json = await response.json()
+
+  return json.data
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getOrders } from "../../api/ordersApi";
+import { getOrders } from "../../services/ordersApi";
 
 const initialForm = {
   orderId: "",
