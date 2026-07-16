@@ -24,16 +24,15 @@ function DashboardPage() {
 
   async function loadDashboard() {
     try {
-      const [
-        orders,
-        customers,
-        invoices,
-        inventory,
-      ] = await Promise.all([
-        getOrders(),
-        getInvoices(),
-        getInventory(),
-      ])
+    const [
+  orders,
+  invoices,
+  inventory,
+] = await Promise.all([
+  getOrders(),
+  getInvoices(),
+  getInventory(),
+])
 
       const revenue = invoices.reduce(
         (sum, invoice) =>
