@@ -1,4 +1,5 @@
 import EmptyState from "../orders/EmptyState";
+import { generateInvoicePDF } from "../../utils/pdfGenerator";
 import "./InvoiceTable.css";
 
 const columns = [
@@ -61,10 +62,17 @@ function InvoiceTable({
                   </button>
 
                   <button
-                    className="btn btn-sm btn-outline-danger"
+                    className="btn btn-sm btn-outline-danger me-2"
                     onClick={() => onDelete(invoice)}
                   >
                     Delete
+                  </button>
+
+                  <button
+                    className="btn btn-sm btn-outline-success"
+                    onClick={() => generateInvoicePDF(invoice)}
+                  >
+                    PDF
                   </button>
                 </td>
               </tr>
