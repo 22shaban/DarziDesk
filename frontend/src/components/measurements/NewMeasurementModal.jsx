@@ -13,6 +13,7 @@ function NewMeasurementModal({ onClose, onCreated }) {
     sleeve: '',
     neck: '',
     length: '',
+    customerNotes: "",
   })
 
   function handleChange(e) {
@@ -133,6 +134,20 @@ function NewMeasurementModal({ onClose, onCreated }) {
               onChange={handleChange}
             />
           </div>
+          <div className="mb-3">
+  <label className="form-label">
+    Customer Notes
+  </label>
+
+  <textarea
+    className="form-control"
+    name="customerNotes"
+    rows="4"
+    value={form.customerNotes}
+    onChange={handleChange}
+    placeholder="Enter any special tailoring instructions..."
+  />
+</div>
 
         </div>
 

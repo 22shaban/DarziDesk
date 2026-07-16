@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import "../orders/NewOrderModal.css";
 import EmptyState from '../orders/EmptyState'
 import EditMeasurementModal from './EditMeasurementModal'
 import DeleteMeasurementModal from './DeleteMeasurementModal'
@@ -22,6 +22,7 @@ const columns = [
 function MeasurementTable({ measurements, refresh }) {
   const [selectedMeasurement, setSelectedMeasurement] = useState(null)
   const [deleteMeasurementData, setDeleteMeasurementData] = useState(null)
+  const [viewNotes, setViewNotes] = useState(null);
 
   return (
     <div className="measurements-table-card">
@@ -71,6 +72,13 @@ function MeasurementTable({ measurements, refresh }) {
                   >
                     Delete
                   </button>
+
+                  <button
+  className="btn btn-sm btn-outline-info"
+  onClick={() => setViewNotes(measurement)}
+>
+  View Notes
+</button>
                 </td>
               </tr>
             ))
@@ -93,6 +101,31 @@ function MeasurementTable({ measurements, refresh }) {
           onDeleted={refresh}
         />
       )}
+      {viewNotes && (
+  <div className="modal-overlay">
+    <div className="modal-card">
+
+      <h2>Customer Notes</h2>
+
+      <textarea
+        className="form-control"
+        rows="6"
+        value={viewNotes.customerNotes || "No notes available."}
+        readOnly
+      />
+
+      <div className="d-flex justify-content-end mt-3">
+        <button
+          className="btn btn-secondary"
+          onClick={() => setViewNotes(null)}
+        >
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   )
 }

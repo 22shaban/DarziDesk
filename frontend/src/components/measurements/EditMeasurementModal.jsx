@@ -7,6 +7,7 @@ function EditMeasurementModal({
   onClose,
   onUpdated,
 }) {
+
   const [form, setForm] = useState({
     customerName: measurement.customerName,
     phone: measurement.phone,
@@ -17,7 +18,9 @@ function EditMeasurementModal({
     sleeve: measurement.sleeve,
     neck: measurement.neck,
     length: measurement.length,
+    customerNotes: measurement.customerNotes || "",
   })
+
 
   function handleChange(e) {
     setForm({
@@ -26,8 +29,11 @@ function EditMeasurementModal({
     })
   }
 
+
   async function handleUpdate() {
+
     try {
+
       await updateMeasurement(
         measurement.measurementId,
         form,
@@ -38,21 +44,35 @@ function EditMeasurementModal({
       await onUpdated()
 
       onClose()
+
     } catch (error) {
+
       console.error(error)
+
       alert('Failed to update measurement')
+
     }
+
   }
 
+
   return (
+
     <div className="modal-overlay">
+
       <div className="modal-card measurement-modal">
+
         <h2>Edit Measurement</h2>
+
 
         <div className="row g-3">
 
+
           <div className="col-md-6">
-            <label className="form-label">Customer Name</label>
+            <label className="form-label">
+              Customer Name
+            </label>
+
             <input
               className="form-control"
               name="customerName"
@@ -61,8 +81,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-6">
-            <label className="form-label">Phone</label>
+            <label className="form-label">
+              Phone
+            </label>
+
             <input
               className="form-control"
               name="phone"
@@ -71,8 +96,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-6">
-            <label className="form-label">Garment Type</label>
+            <label className="form-label">
+              Garment Type
+            </label>
+
             <input
               className="form-control"
               name="garmentType"
@@ -81,8 +111,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Chest</label>
+            <label className="form-label">
+              Chest
+            </label>
+
             <input
               className="form-control"
               name="chest"
@@ -91,8 +126,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Waist</label>
+            <label className="form-label">
+              Waist
+            </label>
+
             <input
               className="form-control"
               name="waist"
@@ -101,8 +141,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Shoulder</label>
+            <label className="form-label">
+              Shoulder
+            </label>
+
             <input
               className="form-control"
               name="shoulder"
@@ -111,8 +156,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Sleeve</label>
+            <label className="form-label">
+              Sleeve
+            </label>
+
             <input
               className="form-control"
               name="sleeve"
@@ -121,8 +171,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Neck</label>
+            <label className="form-label">
+              Neck
+            </label>
+
             <input
               className="form-control"
               name="neck"
@@ -131,8 +186,13 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
           <div className="col-md-4">
-            <label className="form-label">Length</label>
+            <label className="form-label">
+              Length
+            </label>
+
             <input
               className="form-control"
               name="length"
@@ -141,9 +201,32 @@ function EditMeasurementModal({
             />
           </div>
 
+
+
+          <div className="col-12">
+
+            <label className="form-label">
+              Customer Notes
+            </label>
+
+            <textarea
+              className="form-control"
+              name="customerNotes"
+              rows="4"
+              value={form.customerNotes}
+              onChange={handleChange}
+              placeholder="Enter any special tailoring instructions..."
+            />
+
+          </div>
+
+
         </div>
 
+
+
         <div className="d-flex justify-content-end gap-2 mt-4">
+
           <button
             className="btn btn-secondary"
             onClick={onClose}
@@ -151,16 +234,24 @@ function EditMeasurementModal({
             Cancel
           </button>
 
+
           <button
             className="btn btn-primary"
             onClick={handleUpdate}
           >
             Update Measurement
           </button>
+
         </div>
+
+
       </div>
+
     </div>
+
   )
+
 }
+
 
 export default EditMeasurementModal
