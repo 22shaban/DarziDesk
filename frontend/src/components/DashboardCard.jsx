@@ -1,9 +1,20 @@
 import './DashboardCard.css'
 
-function DashboardCard({ title }) {
+function DashboardCard({
+  title,
+  value = '-',
+}) {
   return (
     <article className="dashboard-card p-3">
-      <h3 className="mb-0">{title}</h3>
+
+      <p className="dashboard-card-title mb-2">
+        {title}
+      </p>
+
+      <h2 className="dashboard-card-value mb-0">
+        {value}
+      </h2>
+
     </article>
   )
 }
