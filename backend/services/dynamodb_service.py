@@ -44,34 +44,49 @@ class DynamoDBService:
         return response.get("Item")
 
     def update_order(
-        self,
-        order_id,
-        customer_name,
-        phone,
-        garment_type,
-        status,
-    ):
-        return self.client.update_item(
-            TableName="Orders",
-            Key={
-                "orderId": {"S": order_id},
-            },
-            UpdateExpression="""
-                SET customerName=:customerName,
-                    phone=:phone,
-                    garmentType=:garmentType,
-                    #status=:status
-            """,
-            ExpressionAttributeNames={
-                "#status": "status",
-            },
-            ExpressionAttributeValues={
-                ":customerName": {"S": customer_name},
-                ":phone": {"S": phone},
-                ":garmentType": {"S": garment_type},
-                ":status": {"S": status},
-            },
-        )
+    self,
+    order_id,
+    customer_name,
+    phone,
+    garment_type,
+    status,
+    delivery_date,
+    assigned_tailor,
+    advance,
+    remaining,
+    total_amount,
+):
+     return self.client.update_item(
+        TableName="Orders",
+        Key={
+            "orderId": {"S": order_id},
+        },
+        UpdateExpression="""
+            SET customerName=:customerName,
+                phone=:phone,
+                garmentType=:garmentType,
+                deliveryDate=:deliveryDate,
+                assignedTailor=:assignedTailor,
+                advance=:advance,
+                remaining=:remaining,
+                totalAmount=:totalAmount,
+                #status=:status
+        """,
+        ExpressionAttributeNames={
+            "#status": "status",
+        },
+        ExpressionAttributeValues={
+            ":customerName": {"S": customer_name},
+            ":phone": {"S": phone},
+            ":garmentType": {"S": garment_type},
+            ":deliveryDate": {"S": delivery_date},
+            ":assignedTailor": {"S": assigned_tailor},
+            ":advance": {"S": str(advance)},
+            ":remaining": {"S": str(remaining)},
+            ":totalAmount": {"S": str(total_amount)},
+            ":status": {"S": status},
+        },
+    )
 
     def delete_order(self, order_id):
         return self.client.delete_item(

@@ -1,57 +1,117 @@
 import { useEffect, useState } from "react";
-import InventoryTable from "../components/inventory/InventoryTable";
-import NewInventoryModal from "../components/inventory/NewInventoryModal";
-import { getInventory } from "../services/inventoryApi";
-import "./InventoryPage.css";
+import {
+  getInvoices,
+  createInvoice,
+  updateInvoice,
+  deleteInvoice,
+} from "../services/invoiceApi";
 
-function InventoryPage() {
-  const [inventory, setInventory] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+import InvoiceTable from "../components/invoices/InvoiceTable";
+import NewInvoiceModal from "../components/invoices/NewInvoiceModal";
+import EditInvoiceModal from "../components/invoices/EditInvoiceModal";
 
-  async function loadInventory() {
+import "./InvoicesPage.css";
+
+function InvoicesPage() {
+  const [invoices, setInvoices] = useState([]);
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState(null);
+
+  async function loadInvoices() {
     try {
-      const data = await getInventory();
-      setInventory(data);
+      const data = await getInvoices();
+      setInvoices(data || []);
     } catch (error) {
       console.error(error);
     }
   }
 
   useEffect(() => {
-    loadInventory();
+    loadInvoices();
   }, []);
 
+  async function handleCreate(data) {
+    try {
+      await createInvoice(data);
+      setShowNewModal(false);
+      loadInvoices();
+    } catch {
+      alert("Failed to create invoice.");
+    }
+  }
+
+  async function handleUpdate(data) {
+    try {
+      await updateInvoice(data.invoiceId, data);
+      setEditingInvoice(null);
+      loadInvoices();
+    } catch {
+      alert("Failed to update invoice.");
+    }
+  }
+
+  async function handleDelete(invoice) {
+    if (
+      !window.confirm(
+        `Delete invoice for ${invoice.customerName}?`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await deleteInvoice(invoice.invoiceId);
+      loadInvoices();
+    } catch {
+      alert("Failed to delete invoice.");
+    }
+  }
+
   return (
-    <>
-      <div className="page-header d-flex justify-content-between align-items-center mb-4">
+    <div className="invoices-page">
+
+      <div className="page-header">
+
         <div>
-          <h2>Fabric & Inventory</h2>
-          <p className="text-muted">
-            Manage fabrics and stock levels.
+          <h2>Invoices</h2>
+
+          <p>
+            Manage customer invoices and payments.
           </p>
         </div>
 
         <button
           className="btn btn-primary"
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowNewModal(true)}
         >
-          + Add Fabric
+          + Add Invoice
         </button>
+
       </div>
 
-      <InventoryTable
-  inventory={inventory}
-  onRefresh={loadInventory}
-/>
+      <InvoiceTable
+        invoices={invoices}
+        onEdit={setEditingInvoice}
+        onDelete={handleDelete}
+      />
 
-      {showModal && (
-        <NewInventoryModal
-          onClose={() => setShowModal(false)}
-          onCreated={loadInventory}
+      {showNewModal && (
+        <NewInvoiceModal
+          onClose={() => setShowNewModal(false)}
+          onSave={handleCreate}
         />
       )}
-    </>
+
+      {editingInvoice && (
+        <EditInvoiceModal
+          invoice={editingInvoice}
+          onClose={() => setEditingInvoice(null)}
+          onSave={handleUpdate}
+        />
+      )}
+
+    </div>
   );
 }
 
-export default InventoryPage;
+export default InvoicesPage;

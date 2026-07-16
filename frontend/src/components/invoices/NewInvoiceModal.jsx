@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getOrders } from "../../api/ordersApi";
 
 const initialForm = {
   orderId: "",
@@ -11,9 +12,72 @@ const initialForm = {
 
 function NewInvoiceModal({ onClose, onSave }) {
   const [form, setForm] = useState(initialForm);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    async function loadOrders() {
+      try {
+        const data = await getOrders();
+        setOrders(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadOrders();
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
+
+    // Order selected
+    if (name === "orderId") {
+      const selectedOrder = orders.find(
+        (order) => order.orderId === value
+      );
+
+      if (selectedOrder) {
+        const total = Number(selectedOrder.totalAmount || 0);
+
+        setForm({
+          orderId: selectedOrder.orderId,
+          customerName: selectedOrder.customerName,
+          totalAmount: total,
+          advancePaid: "",
+          remainingAmount: total,
+          paymentStatus: "Pending",
+        });
+
+        return;
+      }
+    }
+
+    // Advance changed
+    if (name === "advancePaid") {
+      const advance = Number(value || 0);
+      const total = Number(form.totalAmount || 0);
+
+      const remaining = Math.max(total - advance, 0);
+
+      let paymentStatus = "Pending";
+
+      if (advance === 0) {
+        paymentStatus = "Pending";
+      } else if (remaining === 0) {
+        paymentStatus = "Paid";
+      } else {
+        paymentStatus = "Partially Paid";
+      }
+
+      setForm((previous) => ({
+        ...previous,
+        advancePaid: advance,
+        remainingAmount: remaining,
+        paymentStatus,
+      }));
+
+      return;
+    }
 
     setForm((previous) => ({
       ...previous,
@@ -60,13 +124,26 @@ function NewInvoiceModal({ onClose, onSave }) {
                   Order ID
                 </label>
 
-                <input
-                  className="form-control"
+                <select
+                  className="form-select"
                   name="orderId"
                   value={form.orderId}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">
+                    Select Order
+                  </option>
+
+                  {orders.map((order) => (
+                    <option
+                      key={order.orderId}
+                      value={order.orderId}
+                    >
+                      {order.orderId} - {order.customerName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="mb-3">
@@ -76,10 +153,8 @@ function NewInvoiceModal({ onClose, onSave }) {
 
                 <input
                   className="form-control"
-                  name="customerName"
                   value={form.customerName}
-                  onChange={handleChange}
-                  required
+                  readOnly
                 />
               </div>
 
@@ -89,12 +164,9 @@ function NewInvoiceModal({ onClose, onSave }) {
                 </label>
 
                 <input
-                  type="number"
                   className="form-control"
-                  name="totalAmount"
                   value={form.totalAmount}
-                  onChange={handleChange}
-                  required
+                  readOnly
                 />
               </div>
 
@@ -119,12 +191,9 @@ function NewInvoiceModal({ onClose, onSave }) {
                 </label>
 
                 <input
-                  type="number"
                   className="form-control"
-                  name="remainingAmount"
                   value={form.remainingAmount}
-                  onChange={handleChange}
-                  required
+                  readOnly
                 />
               </div>
 
@@ -133,16 +202,11 @@ function NewInvoiceModal({ onClose, onSave }) {
                   Payment Status
                 </label>
 
-                <select
-                  className="form-select"
-                  name="paymentStatus"
+                <input
+                  className="form-control"
                   value={form.paymentStatus}
-                  onChange={handleChange}
-                >
-                  <option>Pending</option>
-                  <option>Partially Paid</option>
-                  <option>Paid</option>
-                </select>
+                  readOnly
+                />
               </div>
 
             </div>

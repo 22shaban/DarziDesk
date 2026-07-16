@@ -8,8 +8,31 @@ function NewOrderModal({ onClose }) {
   const [garmentType, setGarmentType] = useState('')
   const [deliveryDate, setDeliveryDate] = useState('')
   const [assignedTailor, setAssignedTailor] = useState('')
+
+  const [totalAmount, setTotalAmount] = useState('')
   const [advance, setAdvance] = useState('')
   const [remaining, setRemaining] = useState('')
+
+  function handleTotalChange(value) {
+    setTotalAmount(value)
+
+    const total = Number(value || 0)
+    const adv = Number(advance || 0)
+
+    setRemaining(Math.max(total - adv, 0))
+  }
+
+  function handleAdvanceChange(value) {
+    const total = Number(totalAmount || 0)
+
+    const adv = Math.min(
+      Number(value || 0),
+      total
+    )
+
+    setAdvance(adv)
+    setRemaining(total - adv)
+  }
 
   async function handleSave() {
     try {
@@ -20,6 +43,7 @@ function NewOrderModal({ onClose }) {
         status: 'Pending',
         deliveryDate,
         assignedTailor,
+        totalAmount,
         advance,
         remaining,
       })
@@ -39,7 +63,9 @@ function NewOrderModal({ onClose }) {
     <div className="modal-overlay">
       <div className="modal-card">
 
-        <h2 className="mb-4">New Order</h2>
+        <h2 className="mb-4">
+          New Order
+        </h2>
 
         <div className="mb-3">
           <label className="form-label">
@@ -50,7 +76,6 @@ function NewOrderModal({ onClose }) {
             className="form-control"
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
-            placeholder="Customer name"
           />
         </div>
 
@@ -63,7 +88,6 @@ function NewOrderModal({ onClose }) {
             className="form-control"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone number"
           />
         </div>
 
@@ -76,7 +100,6 @@ function NewOrderModal({ onClose }) {
             className="form-control"
             value={garmentType}
             onChange={(e) => setGarmentType(e.target.value)}
-            placeholder="Suit / Kurta / Sherwani"
           />
         </div>
 
@@ -102,11 +125,25 @@ function NewOrderModal({ onClose }) {
             className="form-control"
             value={assignedTailor}
             onChange={(e) => setAssignedTailor(e.target.value)}
-            placeholder="Tailor name"
           />
         </div>
 
         <div className="row">
+
+          <div className="col">
+
+            <label className="form-label">
+              Total Amount
+            </label>
+
+            <input
+              type="number"
+              className="form-control"
+              value={totalAmount}
+              onChange={(e) => handleTotalChange(e.target.value)}
+            />
+
+          </div>
 
           <div className="col">
 
@@ -118,27 +155,25 @@ function NewOrderModal({ onClose }) {
               type="number"
               className="form-control"
               value={advance}
-              onChange={(e) => setAdvance(e.target.value)}
-              placeholder="0"
+              onChange={(e) => handleAdvanceChange(e.target.value)}
             />
 
           </div>
 
-          <div className="col">
+        </div>
 
-            <label className="form-label">
-              Remaining
-            </label>
+        <div className="mt-3">
 
-            <input
-              type="number"
-              className="form-control"
-              value={remaining}
-              onChange={(e) => setRemaining(e.target.value)}
-              placeholder="0"
-            />
+          <label className="form-label">
+            Remaining
+          </label>
 
-          </div>
+          <input
+            type="number"
+            className="form-control"
+            value={remaining}
+            readOnly
+          />
 
         </div>
 

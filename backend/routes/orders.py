@@ -30,6 +30,7 @@ def create_order():
     advance = str(payload.get("advance") or "0")
 
     remaining = str(payload.get("remaining") or "0")
+    total_amount = str(payload.get("totalAmount") or "0")
 
     missing_fields = [
         field
@@ -67,6 +68,7 @@ def create_order():
         "assignedTailor": {"S": assigned_tailor},
         "advance": {"S": advance},
         "remaining": {"S": remaining},
+        "totalAmount": {"S": total_amount},
     }
 
     service = DynamoDBService()
@@ -101,6 +103,8 @@ def get_orders():
                 "assignedTailor": item.get("assignedTailor", {}).get("S", ""),
                 "advance": item.get("advance", {}).get("S", "0"),
                 "remaining": item.get("remaining", {}).get("S", "0"),
+                "totalAmount": item.get("totalAmount", {}).get("S", "0"),
+                
             }
         )
 
@@ -138,6 +142,7 @@ def get_order(order_id: str):
         "assignedTailor": item.get("assignedTailor", {}).get("S", ""),
         "advance": item.get("advance", {}).get("S", "0"),
         "remaining": item.get("remaining", {}).get("S", "0"),
+        "totalAmount": item.get("totalAmount", {}).get("S", "0"),
     }
 
     return json_response(
@@ -162,6 +167,7 @@ def update_order(order_id: str):
     advance = str(payload.get("advance") or "0")
 
     remaining = str(payload.get("remaining") or "0")
+    total_amount = str(payload.get("totalAmount") or "0")
 
     missing_fields = [
         field

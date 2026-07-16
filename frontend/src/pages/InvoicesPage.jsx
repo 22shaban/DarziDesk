@@ -1,76 +1,117 @@
-import { FiPlus } from 'react-icons/fi'
-import InvoiceSearch from '../components/invoices/InvoiceSearch'
-import InvoiceTable from '../components/invoices/InvoiceTable'
-import './InvoicesPage.css'
+import { useEffect, useState } from "react";
+import {
+  getInvoices,
+  createInvoice,
+  updateInvoice,
+  deleteInvoice,
+} from "../services/invoiceApi";
+
+import InvoiceTable from "../components/invoices/InvoiceTable";
+import NewInvoiceModal from "../components/invoices/NewInvoiceModal";
+import EditInvoiceModal from "../components/invoices/EditInvoiceModal";
+
+import "./InvoicesPage.css";
 
 function InvoicesPage() {
+  const [invoices, setInvoices] = useState([]);
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState(null);
+
+  async function loadInvoices() {
+    try {
+      const data = await getInvoices();
+      setInvoices(data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    loadInvoices();
+  }, []);
+
+  async function handleCreate(data) {
+    try {
+      await createInvoice(data);
+      setShowNewModal(false);
+      loadInvoices();
+    } catch {
+      alert("Failed to create invoice.");
+    }
+  }
+
+  async function handleUpdate(data) {
+    try {
+      await updateInvoice(data.invoiceId, data);
+      setEditingInvoice(null);
+      loadInvoices();
+    } catch {
+      alert("Failed to update invoice.");
+    }
+  }
+
+  async function handleDelete(invoice) {
+    if (
+      !window.confirm(
+        `Delete invoice for ${invoice.customerName}?`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await deleteInvoice(invoice.invoiceId);
+      loadInvoices();
+    } catch {
+      alert("Failed to delete invoice.");
+    }
+  }
+
   return (
-    <section className="invoices-page">
-      <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+    <div className="invoices-page">
+
+      <div className="page-header">
+
         <div>
-          <h1 className="mb-1">Invoices</h1>
+          <h2>Invoices</h2>
+
+          <p>
+            Manage customer invoices and payments.
+          </p>
         </div>
 
-        <button type="button" className="btn invoices-create-btn">
-          <FiPlus className="me-2" />
-          Create Invoice
+        <button
+          className="btn btn-primary"
+          onClick={() => setShowNewModal(true)}
+        >
+          + Add Invoice
         </button>
+
       </div>
 
-      <div className="invoices-toolbar card p-3 mb-4">
-        <div className="row g-3 align-items-center">
-          <div className="col-5">
-            <InvoiceSearch />
-          </div>
+      <InvoiceTable
+        invoices={invoices}
+        onEdit={setEditingInvoice}
+        onDelete={handleDelete}
+      />
 
-          <div className="col-3 ms-auto">
-            <label className="form-label mb-2 invoices-filter-label" htmlFor="statusFilter">
-              Status
-            </label>
-            <select id="statusFilter" className="form-select invoices-filter-select">
-              <option>All Statuses</option>
-              <option>Paid</option>
-              <option>Pending</option>
-              <option>Overdue</option>
-            </select>
-          </div>
-        </div>
-      </div>
+      {showNewModal && (
+        <NewInvoiceModal
+          onClose={() => setShowNewModal(false)}
+          onSave={handleCreate}
+        />
+      )}
 
-      <InvoiceTable />
+      {editingInvoice && (
+        <EditInvoiceModal
+          invoice={editingInvoice}
+          onClose={() => setEditingInvoice(null)}
+          onSave={handleUpdate}
+        />
+      )}
 
-      <div className="row g-3 mt-4">
-        <div className="col-3">
-          <article className="invoice-summary-card p-3">
-            <h2 className="mb-1">Total Invoices</h2>
-            <p className="mb-0">Placeholder summary</p>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="invoice-summary-card p-3">
-            <h2 className="mb-1">Paid</h2>
-            <p className="mb-0">Placeholder summary</p>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="invoice-summary-card p-3">
-            <h2 className="mb-1">Pending</h2>
-            <p className="mb-0">Placeholder summary</p>
-          </article>
-        </div>
-        <div className="col-3">
-          <article className="invoice-summary-card p-3">
-            <h2 className="mb-1">Overdue</h2>
-            <p className="mb-0">Placeholder summary</p>
-          </article>
-        </div>
-      </div>
-
-      <div className="invoices-pagination-placeholder mt-4">
-        Pagination placeholder
-      </div>
-    </section>
-  )
+    </div>
+  );
 }
 
-export default InvoicesPage
+export default InvoicesPage;

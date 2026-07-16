@@ -12,7 +12,7 @@ const columns = [
 ];
 
 function InvoiceTable({
-  invoices,
+  invoices = [],
   onEdit,
   onDelete,
 }) {
