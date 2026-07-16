@@ -29,9 +29,9 @@ export function generateInvoicePDF(invoice) {
     ["Invoice ID", invoice.invoiceId || "-"],
     ["Order ID", invoice.orderId || "-"],
     ["Customer", invoice.customerName || "-"],
-    ["Total Amount", `₹${invoice.totalAmount || 0}`],
-    ["Advance Paid", `₹${invoice.advancePaid || 0}`],
-    ["Remaining Amount", `₹${invoice.remainingAmount || 0}`],
+    ["Total Amount",`Rs. ${invoice.totalAmount || 0}`],
+    ["Advance Paid", `Rs. ${invoice.advancePaid || 0}`],
+    ["Remaining Amount", `Rs. ${invoice.remainingAmount || 0}`],
     ["Payment Status", invoice.paymentStatus || "-"],
     [
       "Generated On",
