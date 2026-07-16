@@ -1,11 +1,21 @@
-import './ReportCard.css'
+import "./ReportCard.css";
 
-function ReportCard({ title }) {
+function ReportCard({ title, value, color }) {
   return (
-    <article className="report-card p-3">
-      <h3 className="mb-0">{title}</h3>
-    </article>
-  )
+    <div className={`card border-start border-5 border-${color} shadow-sm h-100`}>
+      <div className="card-body">
+
+        <h6 className="text-muted mb-2">
+          {title}
+        </h6>
+
+        <h2 className="fw-bold mb-0">
+          {value}
+        </h2>
+
+      </div>
+    </div>
+  );
 }
 
-export default ReportCard
+export default ReportCard;
