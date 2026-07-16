@@ -2,7 +2,10 @@ import { useState } from 'react'
 import './NewOrderModal.css'
 import { createOrder } from '../../services/ordersApi'
 
-function NewOrderModal({ onClose }) {
+function NewOrderModal({
+  onClose,
+  onSaved,
+}) {
   const [customerName, setCustomerName] = useState('')
   const [phone, setPhone] = useState('')
   const [garmentType, setGarmentType] = useState('')
@@ -50,9 +53,9 @@ function NewOrderModal({ onClose }) {
 
       alert('Order created successfully!')
 
-      onClose()
+await onSaved()
 
-      window.location.reload()
+onClose()
     } catch (error) {
       console.error(error)
       alert('Failed to create order')

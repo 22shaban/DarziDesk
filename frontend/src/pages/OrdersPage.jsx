@@ -1,5 +1,6 @@
 import { FiPlus } from 'react-icons/fi'
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { getOrders } from '../services/ordersApi'
 
@@ -12,20 +13,17 @@ import './OrdersPage.css'
 const PAGE_SIZE = 5
 
 function OrdersPage() {
+  const navigate = useNavigate()
+
   const [orders, setOrders] = useState([])
-
   const [showModal, setShowModal] = useState(false)
-
   const [searchText, setSearchText] = useState('')
-
   const [statusFilter, setStatusFilter] = useState('All')
-
   const [currentPage, setCurrentPage] = useState(1)
 
   async function loadOrders() {
     try {
       const data = await getOrders()
-
       setOrders(data)
     } catch (error) {
       console.error(error)
@@ -35,6 +33,14 @@ function OrdersPage() {
   useEffect(() => {
     loadOrders()
   }, [])
+
+  function handleCreateInvoice(order) {
+    navigate('/invoices', {
+      state: {
+        selectedOrder: order,
+      },
+    })
+  }
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
@@ -82,7 +88,6 @@ function OrdersPage() {
           onClick={() => setShowModal(true)}
         >
           <FiPlus className="me-2" />
-
           New Order
         </button>
 
@@ -131,50 +136,43 @@ function OrdersPage() {
 
       </div>
 
-      <OrderTable
-        orders={paginatedOrders}
-        refresh={loadOrders}
-      />
+    <OrderTable
+  orders={paginatedOrders}
+  onEdit={loadOrders}
+  onDelete={loadOrders}
+  onCreateInvoice={handleCreateInvoice}
+/>
 
       <div className="orders-pagination-placeholder mt-4 d-flex justify-content-center align-items-center gap-3">
 
         <button
           className="btn btn-outline-secondary"
           disabled={currentPage === 1}
-          onClick={() =>
-            setCurrentPage((page) => page - 1)
-          }
+          onClick={() => setCurrentPage((page) => page - 1)}
         >
           Previous
         </button>
 
         <span>
-
           Page {currentPage} of {totalPages}
-
         </span>
 
         <button
           className="btn btn-outline-secondary"
           disabled={currentPage === totalPages}
-          onClick={() =>
-            setCurrentPage((page) => page + 1)
-          }
+          onClick={() => setCurrentPage((page) => page + 1)}
         >
           Next
         </button>
 
       </div>
 
-      {showModal && (
-        <NewOrderModal
-          onClose={() => {
-            setShowModal(false)
-
-            loadOrders()
-          }}
-        />
-      )}
+     {showModal && (
+  <NewOrderModal
+    onClose={() => setShowModal(false)}
+    onSaved={loadOrders}
+  />
+)}
 
     </section>
   )

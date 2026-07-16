@@ -10,7 +10,11 @@ const initialForm = {
   paymentStatus: "Pending",
 };
 
-function NewInvoiceModal({ onClose, onSave }) {
+function NewInvoiceModal({
+  onClose,
+  onSave,
+  selectedOrder,
+}) {
   const [form, setForm] = useState(initialForm);
   const [orders, setOrders] = useState([]);
 
@@ -27,62 +31,142 @@ function NewInvoiceModal({ onClose, onSave }) {
     loadOrders();
   }, []);
 
+  // Auto-fill when opened from Orders page
+  useEffect(() => {
+    if (!selectedOrder) return;
+
+    const total = Number(selectedOrder.totalAmount || 0);
+    const advance = Number(selectedOrder.advance || 0);
+    const remaining = total - advance;
+
+    let paymentStatus = "Pending";
+
+    if (advance === 0) {
+      paymentStatus = "Pending";
+    } else if (remaining <= 0) {
+      paymentStatus = "Paid";
+    } else {
+      paymentStatus = "Partially Paid";
+    }
+
+    setForm({
+      orderId: selectedOrder.orderId,
+      customerName: selectedOrder.customerName,
+      totalAmount: total,
+      advancePaid: advance,
+      remainingAmount: remaining,
+      paymentStatus,
+    });
+  }, [selectedOrder]);
+
   function handleChange(event) {
     const { name, value } = event.target;
 
-    // Order selected
     if (name === "orderId") {
-      const selectedOrder = orders.find(
+      const selected = orders.find(
         (order) => order.orderId === value
       );
 
-      if (selectedOrder) {
-        const total = Number(selectedOrder.totalAmount || 0);
+      if (selected) {
+       const total = Number(selected.totalAmount || 0);
+
+// If order already has a total amount, preload advance.
+// Otherwise start from 0.
+const advance = total > 0
+  ? Number(selected.advance || 0)
+  : 0;
+
+const remaining = Math.max(total - advance, 0);
+
+        let paymentStatus = "Pending";
+
+        if (advance === 0) {
+          paymentStatus = "Pending";
+        } else if (remaining <= 0) {
+          paymentStatus = "Paid";
+        } else {
+          paymentStatus = "Partially Paid";
+        }
 
         setForm({
-          orderId: selectedOrder.orderId,
-          customerName: selectedOrder.customerName,
+          orderId: selected.orderId,
+          customerName: selected.customerName,
           totalAmount: total,
-          advancePaid: "",
-          remainingAmount: total,
-          paymentStatus: "Pending",
+          advancePaid: advance,
+          remainingAmount: remaining,
+          paymentStatus,
         });
 
         return;
       }
     }
 
-    // Advance changed
-    if (name === "advancePaid") {
-      const advance = Number(value || 0);
-      const total = Number(form.totalAmount || 0);
-
-      const remaining = Math.max(total - advance, 0);
-
-      let paymentStatus = "Pending";
-
-      if (advance === 0) {
-        paymentStatus = "Pending";
-      } else if (remaining === 0) {
-        paymentStatus = "Paid";
-      } else {
-        paymentStatus = "Partially Paid";
-      }
-
-      setForm((previous) => ({
+    setForm((previous) => {
+      const updated = {
         ...previous,
-        advancePaid: advance,
-        remainingAmount: remaining,
-        paymentStatus,
-      }));
+        [name]: value,
+      };
 
-      return;
-    }
+     if (name === "advancePaid") {
+  const total = Number(updated.totalAmount || 0);
 
-    setForm((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+  // Prevent advance from exceeding total
+  const advance = Math.min(
+    Number(value || 0),
+    total
+  );
+
+  const remaining = Math.max(
+    total - advance,
+    0
+  );
+
+  let paymentStatus = "Pending";
+
+  if (advance === 0) {
+    paymentStatus = "Pending";
+  } else if (remaining === 0) {
+    paymentStatus = "Paid";
+  } else {
+    paymentStatus = "Partially Paid";
+  }
+
+  updated.advancePaid = advance;
+  updated.remainingAmount = remaining;
+  updated.paymentStatus = paymentStatus;
+}
+
+if (name === "totalAmount") {
+  const total = Number(value || 0);
+
+  const advance = Math.min(
+    Number(updated.advancePaid || 0),
+    total
+  );
+
+  const remaining = Math.max(
+    total - advance,
+    0
+  );
+
+  let paymentStatus = "Pending";
+
+  if (advance === 0) {
+    paymentStatus = "Pending";
+  } else if (remaining === 0) {
+    paymentStatus = "Paid";
+  } else {
+    paymentStatus = "Partially Paid";
+  }
+
+  updated.totalAmount = total;
+  updated.advancePaid = advance;
+  updated.remainingAmount = remaining;
+  updated.paymentStatus = paymentStatus;
+}
+
+      return updated;
+    });
   }
 
   async function handleSubmit(event) {
@@ -163,11 +247,16 @@ function NewInvoiceModal({ onClose, onSave }) {
                   Total Amount
                 </label>
 
-                <input
-                  className="form-control"
-                  value={form.totalAmount}
-                  readOnly
-                />
+               <input
+  type="number"
+  className="form-control"
+  name="totalAmount"
+  value={form.totalAmount}
+  onChange={handleChange}
+  readOnly={
+    Number(form.totalAmount) > 0
+  }
+/>
               </div>
 
               <div className="mb-3">

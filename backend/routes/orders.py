@@ -196,16 +196,17 @@ def update_order(order_id: str):
         )
 
     service.update_order(
-        order_id=order_id,
-        customer_name=customer_name.strip(),
-        phone=phone.strip(),
-        garment_type=garment_type.strip(),
-        status=status.strip(),
-        delivery_date=delivery_date,
-        assigned_tailor=assigned_tailor,
-        advance=advance,
-        remaining=remaining,
-    )
+    order_id=order_id,
+    customer_name=customer_name.strip(),
+    phone=phone.strip(),
+    garment_type=garment_type.strip(),
+    status=status.strip(),
+    delivery_date=delivery_date,
+    assigned_tailor=assigned_tailor,
+    advance=advance,
+    remaining=remaining,
+    total_amount=total_amount,
+)
 
     return json_response(
         "Order updated successfully",

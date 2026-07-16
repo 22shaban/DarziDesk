@@ -18,108 +18,117 @@ class DynamoDBService:
         self.client = client or create_boto3_client("dynamodb")
         self.table_name = table_name
 
-    # ----------------------------
+    # ==========================================================
+    # Generic Helpers
+    # ==========================================================
+
+    def _put(self, table_name: str, item: dict):
+        return self.client.put_item(
+            TableName=table_name,
+            Item=item,
+        )
+    def _scan(self, table_name: str):
+        response = self.client.scan(
+            TableName=table_name,
+        )
+        return response.get("Items", [])
+
+    def _get(self, table_name: str, key_name: str, key_value: str):
+        response = self.client.get_item(
+            TableName=table_name,
+            Key={
+                key_name: {
+                    "S": key_value,
+                }
+            },
+        )
+        return response.get("Item")
+
+    def _delete(self, table_name: str, key_name: str, key_value: str):
+        return self.client.delete_item(
+            TableName=table_name,
+            Key={
+                key_name: {
+                    "S": key_value,
+                }
+            },
+        )
+
+    # ==========================================================
     # Orders
-    # ----------------------------
+    # ==========================================================
 
     def put_order(self, item):
-        return self.client.put_item(
-            TableName="Orders",
-            Item=item,
-        )
+        return self._put("Orders", item)
 
     def get_orders(self):
-        response = self.client.scan(
-            TableName="Orders",
-        )
-        return response.get("Items", [])
+        return self._scan("Orders")
 
     def get_order(self, order_id):
-        response = self.client.get_item(
-            TableName="Orders",
-            Key={
-                "orderId": {"S": order_id},
-            },
-        )
-        return response.get("Item")
+        return self._get("Orders", "orderId", order_id)
 
     def update_order(
-    self,
-    order_id,
-    customer_name,
-    phone,
-    garment_type,
-    status,
-    delivery_date,
-    assigned_tailor,
-    advance,
-    remaining,
-    total_amount,
-):
-     return self.client.update_item(
-        TableName="Orders",
-        Key={
-            "orderId": {"S": order_id},
-        },
-        UpdateExpression="""
-            SET customerName=:customerName,
-                phone=:phone,
-                garmentType=:garmentType,
-                deliveryDate=:deliveryDate,
-                assignedTailor=:assignedTailor,
-                advance=:advance,
-                remaining=:remaining,
-                totalAmount=:totalAmount,
-                #status=:status
-        """,
-        ExpressionAttributeNames={
-            "#status": "status",
-        },
-        ExpressionAttributeValues={
-            ":customerName": {"S": customer_name},
-            ":phone": {"S": phone},
-            ":garmentType": {"S": garment_type},
-            ":deliveryDate": {"S": delivery_date},
-            ":assignedTailor": {"S": assigned_tailor},
-            ":advance": {"S": str(advance)},
-            ":remaining": {"S": str(remaining)},
-            ":totalAmount": {"S": str(total_amount)},
-            ":status": {"S": status},
-        },
-    )
-
-    def delete_order(self, order_id):
-        return self.client.delete_item(
+        self,
+        order_id,
+        customer_name,
+        phone,
+        garment_type,
+        status,
+        delivery_date,
+        assigned_tailor,
+        advance,
+        remaining,
+        total_amount,
+    ):
+        return self.client.update_item(
             TableName="Orders",
             Key={
-                "orderId": {"S": order_id},
+                "orderId": {
+                    "S": order_id,
+                }
+            },
+            UpdateExpression="""
+                SET customerName=:customerName,
+                    phone=:phone,
+                    garmentType=:garmentType,
+                    deliveryDate=:deliveryDate,
+                    assignedTailor=:assignedTailor,
+                    advance=:advance,
+                    remaining=:remaining,
+                    totalAmount=:totalAmount,
+                    #status=:status
+            """,
+            ExpressionAttributeNames={
+                "#status": "status",
+            },
+            ExpressionAttributeValues={
+                ":customerName": {"S": customer_name},
+                ":phone": {"S": phone},
+                ":garmentType": {"S": garment_type},
+                ":deliveryDate": {"S": delivery_date},
+                ":assignedTailor": {"S": assigned_tailor},
+                ":advance": {"N": str(advance)},
+                ":remaining": {"N": str(remaining)},
+                ":totalAmount": {"N": str(total_amount)},
+                ":status": {"S": status},
             },
         )
 
-    # ----------------------------
+    def delete_order(self, order_id):
+        return self._delete("Orders", "orderId", order_id)
+
+    # ==========================================================
     # Customers
-    # ----------------------------
+    # ==========================================================
 
     def put_customer(self, item):
-        return self.client.put_item(
-            TableName="Customers",
-            Item=item,
-        )
+        return self._put("Customers", item)
 
     def get_customers(self):
-        response = self.client.scan(
-            TableName="Customers",
-        )
-        return response.get("Items", [])
+        return self._scan("Customers")
 
     def get_customer(self, customer_id):
-        response = self.client.get_item(
-            TableName="Customers",
-            Key={
-                "customerId": {"S": customer_id},
-            },
-        )
-        return response.get("Item")
+        return self._get("Customers", "customerId", customer_id)
 
     def update_customer(
         self,
@@ -132,7 +141,9 @@ class DynamoDBService:
         return self.client.update_item(
             TableName="Customers",
             Key={
-                "customerId": {"S": customer_id},
+                "customerId": {
+                    "S": customer_id,
+                }
             },
             UpdateExpression="""
                 SET customerName=:customerName,
@@ -149,37 +160,19 @@ class DynamoDBService:
         )
 
     def delete_customer(self, customer_id):
-        return self.client.delete_item(
-            TableName="Customers",
-            Key={
-                "customerId": {"S": customer_id},
-            },
-        )
-
-    # ----------------------------
+        return self._delete("Customers", "customerId", customer_id)
+    # ==========================================================
     # Measurements
-    # ----------------------------
+    # ==========================================================
 
     def put_measurement(self, item):
-        return self.client.put_item(
-            TableName="Measurements",
-            Item=item,
-        )
+        return self._put("Measurements", item)
 
     def get_measurements(self):
-        response = self.client.scan(
-            TableName="Measurements",
-        )
-        return response.get("Items", [])
+        return self._scan("Measurements")
 
     def get_measurement(self, measurement_id):
-        response = self.client.get_item(
-            TableName="Measurements",
-            Key={
-                "measurementId": {"S": measurement_id},
-            },
-        )
-        return response.get("Item")
+        return self._get("Measurements", "measurementId", measurement_id)
 
     def update_measurement(self, measurement_id, values):
         expression = []
@@ -188,9 +181,14 @@ class DynamoDBService:
         for key, value in values.items():
             expression.append(f"{key}=:{key}")
 
-            attribute_values[f":{key}"] = {
-                "S": str(value),
-            }
+            if isinstance(value, (int, float)):
+                attribute_values[f":{key}"] = {
+                    "N": str(value),
+                }
+            else:
+                attribute_values[f":{key}"] = {
+                    "S": str(value),
+                }
 
         return self.client.update_item(
             TableName="Measurements",
@@ -204,39 +202,28 @@ class DynamoDBService:
         )
 
     def delete_measurement(self, measurement_id):
-        return self.client.delete_item(
-            TableName="Measurements",
-            Key={
-                "measurementId": {
-                    "S": measurement_id,
-                }
-            },
+        return self._delete(
+            "Measurements",
+            "measurementId",
+            measurement_id,
         )
 
-    # ----------------------------
+    # ==========================================================
     # Inventory
-    # ----------------------------
+    # ==========================================================
 
     def put_inventory(self, item):
-        return self.client.put_item(
-            TableName="Inventory",
-            Item=item,
-        )
+        return self._put("Inventory", item)
 
     def get_inventory(self):
-        response = self.client.scan(
-            TableName="Inventory",
-        )
-        return response.get("Items", [])
+        return self._scan("Inventory")
 
     def get_inventory_item(self, inventory_id):
-        response = self.client.get_item(
-            TableName="Inventory",
-            Key={
-                "inventoryId": {"S": inventory_id},
-            },
+        return self._get(
+            "Inventory",
+            "inventoryId",
+            inventory_id,
         )
-        return response.get("Item")
 
     def update_inventory(
         self,
@@ -250,26 +237,27 @@ class DynamoDBService:
         supplier,
         status,
     ):
-        
         return self.client.update_item(
             TableName="Inventory",
             Key={
-                "inventoryId": {"S": inventory_id},
+                "inventoryId": {
+                    "S": inventory_id,
+                }
             },
-          UpdateExpression="""
-    SET fabricName=:fabricName,
-        category=:category,
-        #unit=:unit,
-        quantity=:quantity,
-        costPrice=:costPrice,
-        sellingPrice=:sellingPrice,
-        supplier=:supplier,
-        #status=:status
-""",
-ExpressionAttributeNames={
-    "#status": "status",
-    "#unit": "unit",
-},
+            UpdateExpression="""
+                SET fabricName=:fabricName,
+                    category=:category,
+                    #unit=:unit,
+                    quantity=:quantity,
+                    costPrice=:costPrice,
+                    sellingPrice=:sellingPrice,
+                    supplier=:supplier,
+                    #status=:status
+            """,
+            ExpressionAttributeNames={
+                "#unit": "unit",
+                "#status": "status",
+            },
             ExpressionAttributeValues={
                 ":fabricName": {"S": str(fabric_name)},
                 ":category": {"S": str(category)},
@@ -283,31 +271,28 @@ ExpressionAttributeNames={
         )
 
     def delete_inventory(self, inventory_id):
-        return self.client.delete_item(
-            TableName="Inventory",
-            Key={
-                "inventoryId": {
-                    "S": inventory_id,
-                }
-            },
+        return self._delete(
+            "Inventory",
+            "inventoryId",
+            inventory_id,
         )
-    
-    # ----------------------------
+    # ==========================================================
     # Employees
-    # ----------------------------
+    # ==========================================================
 
     def put_employee(self, item):
-        return self.client.put_item(
-            TableName="Employees",
-            Item=item,
-        )
+        return self._put("Employees", item)
 
     def get_employees(self):
-        response = self.client.scan(
-            TableName="Employees",
+        return self._scan("Employees")
+
+    def get_employee(self, employee_id):
+        return self._get(
+            "Employees",
+            "employeeId",
+            employee_id,
         )
-        return response.get("Items", [])    
-    
+
     def update_employee(
         self,
         employee_id,
@@ -324,17 +309,17 @@ ExpressionAttributeNames={
                     "S": employee_id,
                 }
             },
-          UpdateExpression="""
-    SET employeeName=:employeeName,
-        phone=:phone,
-        #role=:role,
-        salary=:salary,
-        #status=:status
-""",
-           ExpressionAttributeNames={
-    "#status": "status",
-    "#role": "role",
-},
+            UpdateExpression="""
+                SET employeeName=:employeeName,
+                    phone=:phone,
+                    #role=:role,
+                    salary=:salary,
+                    #status=:status
+            """,
+            ExpressionAttributeNames={
+                "#role": "role",
+                "#status": "status",
+            },
             ExpressionAttributeValues={
                 ":employeeName": {"S": str(employee_name)},
                 ":phone": {"S": str(phone)},
@@ -345,30 +330,28 @@ ExpressionAttributeNames={
         )
 
     def delete_employee(self, employee_id):
-        return self.client.delete_item(
-            TableName="Employees",
-            Key={
-                "employeeId": {
-                    "S": employee_id,
-                }
-            },
+        return self._delete(
+            "Employees",
+            "employeeId",
+            employee_id,
         )
-    
-    # ----------------------------
+
+    # ==========================================================
     # Invoices
-    # ----------------------------
+    # ==========================================================
 
     def put_invoice(self, item):
-        return self.client.put_item(
-            TableName="Invoices",
-            Item=item,
-        )
+        return self._put("Invoices", item)
 
     def get_invoices(self):
-        response = self.client.scan(
-            TableName="Invoices",
+        return self._scan("Invoices")
+
+    def get_invoice(self, invoice_id):
+        return self._get(
+            "Invoices",
+            "invoiceId",
+            invoice_id,
         )
-        return response.get("Items", [])
 
     def update_invoice(
         self,
@@ -406,11 +389,8 @@ ExpressionAttributeNames={
         )
 
     def delete_invoice(self, invoice_id):
-        return self.client.delete_item(
-            TableName="Invoices",
-            Key={
-                "invoiceId": {
-                    "S": invoice_id,
-                }
-            },
+        return self._delete(
+            "Invoices",
+            "invoiceId",
+            invoice_id,
         )

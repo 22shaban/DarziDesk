@@ -18,7 +18,12 @@ const tableColumns = [
   'Actions',
 ]
 
-function OrderTable({ orders, refresh }) {
+function OrderTable({
+  orders,
+  onEdit,
+  onDelete,
+  onCreateInvoice,
+}) {
   const [selectedOrder, setSelectedOrder] = useState(null)
   const [deleteModalOrder, setDeleteModalOrder] = useState(null)
 
@@ -79,24 +84,15 @@ function OrderTable({ orders, refresh }) {
 
                   <td>{order.garmentType}</td>
 
-                  <td>
-                    {order.deliveryDate || '-'}
-                  </td>
+                  <td>{order.deliveryDate || '-'}</td>
+
+                  <td>{order.assignedTailor || '-'}</td>
+
+                  <td>{order.advance ?? '-'}</td>
+
+                  <td>{order.remaining ?? '-'}</td>
 
                   <td>
-                    {order.assignedTailor || '-'}
-                  </td>
-
-                  <td>
-                    {order.advance ?? '-'}
-                  </td>
-
-                  <td>
-                    {order.remaining ?? '-'}
-                  </td>
-
-                  <td>
-
                     <span
                       className={
                         order.status === 'Completed'
@@ -106,7 +102,6 @@ function OrderTable({ orders, refresh }) {
                     >
                       {order.status}
                     </span>
-
                   </td>
 
                   <td>
@@ -119,10 +114,17 @@ function OrderTable({ orders, refresh }) {
                     </button>
 
                     <button
-                      className="btn btn-sm btn-outline-danger"
+                      className="btn btn-sm btn-outline-danger me-2"
                       onClick={() => setDeleteModalOrder(order)}
                     >
                       Delete
+                    </button>
+
+                    <button
+                      className="btn btn-sm btn-outline-success"
+                      onClick={() => onCreateInvoice(order)}
+                    >
+                      Create Invoice
                     </button>
 
                   </td>
@@ -140,7 +142,10 @@ function OrderTable({ orders, refresh }) {
         <EditOrderModal
           order={selectedOrder}
           onClose={() => setSelectedOrder(null)}
-          onUpdated={refresh}
+          onUpdated={async () => {
+            await onEdit()
+            setSelectedOrder(null)
+          }}
         />
       )}
 
@@ -148,7 +153,10 @@ function OrderTable({ orders, refresh }) {
         <DeleteOrderModal
           order={deleteModalOrder}
           onClose={() => setDeleteModalOrder(null)}
-          onDeleted={refresh}
+          onDeleted={async () => {
+            await onDelete()
+            setDeleteModalOrder(null)
+          }}
         />
       )}
     </>

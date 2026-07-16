@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   getInvoices,
   createInvoice,
@@ -13,8 +14,10 @@ import EditInvoiceModal from "../components/invoices/EditInvoiceModal";
 import "./InvoicesPage.css";
 
 function InvoicesPage() {
+  const location = useLocation();
   const [invoices, setInvoices] = useState([]);
   const [showNewModal, setShowNewModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [editingInvoice, setEditingInvoice] = useState(null);
 
   async function loadInvoices() {
@@ -26,9 +29,12 @@ function InvoicesPage() {
     }
   }
 
-  useEffect(() => {
-    loadInvoices();
-  }, []);
+ useEffect(() => {
+  if (location.state?.selectedOrder) {
+    setSelectedOrder(location.state.selectedOrder);
+    setShowNewModal(true);
+  }
+}, [location.state]);
 
   async function handleCreate(data) {
     try {
@@ -96,10 +102,14 @@ function InvoicesPage() {
       />
 
       {showNewModal && (
-        <NewInvoiceModal
-          onClose={() => setShowNewModal(false)}
-          onSave={handleCreate}
-        />
+       <NewInvoiceModal
+    selectedOrder={selectedOrder}
+  onClose={() => {
+    setShowNewModal(false);
+    setSelectedOrder(null);
+}}
+    onSave={handleCreate}
+/>
       )}
 
       {editingInvoice && (
