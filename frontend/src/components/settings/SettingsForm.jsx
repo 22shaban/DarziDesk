@@ -1,76 +1,132 @@
+import { useEffect, useState } from 'react'
 import SettingsSection from './SettingsSection'
 import './SettingsForm.css'
 
-const settingsSections = [
-  {
-    title: 'Shop Information',
-    fields: [
-      { label: 'Shop Name', type: 'text', placeholder: 'DarziDesk' },
-      { label: 'Business Phone', type: 'text', placeholder: '+92 300 1234567' },
-    ],
-  },
-  {
-    title: 'Owner Profile',
-    fields: [
-      { label: 'Owner Name', type: 'text', placeholder: 'Owner Name' },
-      { label: 'Email Address', type: 'email', placeholder: 'owner@example.com' },
-    ],
-  },
-  {
-    title: 'Notification Preferences',
-    fields: [
-      { label: 'Order Alerts', type: 'text', placeholder: 'Enabled' },
-      { label: 'Invoice Alerts', type: 'text', placeholder: 'Enabled' },
-    ],
-  },
-  {
-    title: 'Email Settings',
-    fields: [
-      { label: 'SMTP Host', type: 'text', placeholder: 'smtp.example.com' },
-      { label: 'SMTP Port', type: 'text', placeholder: '587' },
-    ],
-  },
-  {
-    title: 'SMS Settings',
-    fields: [
-      { label: 'Provider', type: 'text', placeholder: 'SMS Provider' },
-      { label: 'Sender ID', type: 'text', placeholder: 'DarziDesk' },
-    ],
-  },
-  {
-    title: 'Backup & Restore',
-    fields: [
-      { label: 'Backup Frequency', type: 'text', placeholder: 'Daily' },
-      { label: 'Restore Point', type: 'text', placeholder: 'Select restore point' },
-    ],
-  },
-]
+const defaultSettings = {
+  shopName: 'DarziDesk',
+  ownerName: '',
+  phone: '',
+  email: '',
+  address: '',
+}
 
 function SettingsForm() {
+  const [settings, setSettings] = useState(defaultSettings)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('darzidesk-settings')
+
+    if (saved) {
+      setSettings(JSON.parse(saved))
+    }
+  }, [])
+
+  function handleChange(e) {
+    const { name, value } = e.target
+
+    setSettings((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  function handleSave() {
+    localStorage.setItem(
+      'darzidesk-settings',
+      JSON.stringify(settings)
+    )
+
+    alert('Settings saved successfully!')
+  }
+
   return (
     <div className="settings-form-stack">
-      {settingsSections.map((section) => (
-        <SettingsSection key={section.title} title={section.title}>
-          <div className="row g-3">
-            {section.fields.map((field) => (
-              <div key={field.label} className="col-6">
-                <label className="form-label settings-field-label">{field.label}</label>
-                <input
-                  type={field.type}
-                  className="form-control settings-field-input"
-                  placeholder={field.placeholder}
-                />
-              </div>
-            ))}
+
+      <SettingsSection title="Shop Information">
+
+        <div className="row g-3">
+
+          <div className="col-md-6">
+            <label className="form-label">
+              Shop Name
+            </label>
+
+            <input
+              className="form-control"
+              name="shopName"
+              value={settings.shopName}
+              onChange={handleChange}
+            />
           </div>
-        </SettingsSection>
-      ))}
+
+          <div className="col-md-6">
+            <label className="form-label">
+              Owner Name
+            </label>
+
+            <input
+              className="form-control"
+              name="ownerName"
+              value={settings.ownerName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">
+              Phone Number
+            </label>
+
+            <input
+              className="form-control"
+              name="phone"
+              value={settings.phone}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">
+              Email Address
+            </label>
+
+            <input
+              className="form-control"
+              name="email"
+              value={settings.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-12">
+            <label className="form-label">
+              Shop Address
+            </label>
+
+            <textarea
+              rows="3"
+              className="form-control"
+              name="address"
+              value={settings.address}
+              onChange={handleChange}
+            />
+          </div>
+
+        </div>
+
+      </SettingsSection>
 
       <div className="text-end mt-4">
-        <button type="button" className="btn settings-save-btn">
-          Save Changes
+
+        <button
+          className="btn settings-save-btn"
+          onClick={handleSave}
+        >
+          Save Settings
         </button>
+
       </div>
+
     </div>
   )
 }
