@@ -2,34 +2,56 @@
 
 from flask import Blueprint, request
 
-settings_bp = Blueprint("settings", __name__, url_prefix="/settings")
+from services.settings_dynamodb_service import SettingsDynamoDBService
 
-SHOP_SETTINGS = {
-    "shopName": "King's Men House",
-    "ownerName": "Shaban Shaikh",
-    "phone": "9004594642",
-    "email": "shabanshaikh021@gmail.com",
-    "address": "Almas Height 306, Almas Colony, Kausa, Mumbra",
-}
+settings_bp = Blueprint(
+    "settings",
+    __name__,
+    url_prefix="/settings",
+)
+
+settings_service = SettingsDynamoDBService()
 
 
 @settings_bp.get("")
 def get_settings():
+    item = settings_service.get_settings()
+
+    if not item:
+        return {
+            "status": 404,
+            "message": "Settings not found.",
+            "data": {},
+        }, 404
+
     return {
         "status": 200,
         "message": "Settings fetched successfully.",
-        "data": SHOP_SETTINGS,
+        "data": {
+            "shopName": item["shopName"]["S"],
+            "ownerName": item["ownerName"]["S"],
+            "phone": item["phone"]["S"],
+            "email": item["email"]["S"],
+            "address": item["address"]["S"],
+            "logoUrl": item["logoUrl"]["S"],
+        },
     }
 
 
 @settings_bp.put("")
 def update_settings():
-    global SHOP_SETTINGS
+    data = request.get_json()
 
-    SHOP_SETTINGS.update(request.json)
+    settings_service.update_settings(
+        shop_name=data.get("shopName", ""),
+        owner_name=data.get("ownerName", ""),
+        phone=data.get("phone", ""),
+        email=data.get("email", ""),
+        address=data.get("address", ""),
+        logo_url=data.get("logoUrl", ""),
+    )
 
     return {
         "status": 200,
         "message": "Settings updated successfully.",
-        "data": SHOP_SETTINGS,
     }
