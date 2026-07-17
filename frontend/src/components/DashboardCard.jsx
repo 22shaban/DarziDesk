@@ -1,22 +1,37 @@
-import './DashboardCard.css'
+import "./DashboardCard.css";
 
 function DashboardCard({
   title,
-  value = '-',
+  value,
+  icon,
+  color = "primary",
 }) {
   return (
-    <article className="dashboard-card p-3">
+    <div className={`card shadow-sm border-start border-5 border-${color} h-100`}>
+      <div className="card-body d-flex justify-content-between align-items-center">
 
-      <p className="dashboard-card-title mb-2">
-        {title}
-      </p>
+        <div>
+          <p className="text-muted mb-1">
+            {title}
+          </p>
 
-      <h2 className="dashboard-card-value mb-0">
-        {value}
-      </h2>
+          <h3 className="fw-bold mb-0">
+            {value}
+          </h3>
+        </div>
 
-    </article>
-  )
+        <div
+          style={{
+            fontSize: "2rem",
+            opacity: 0.8,
+          }}
+        >
+          {icon}
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
-export default DashboardCard
+export default DashboardCard;

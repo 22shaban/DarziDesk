@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
+import {
+  FiPackage,
+  FiDollarSign,
+  FiArchive,
+  FiAlertTriangle,
+} from "react-icons/fi";
 
-import DashboardCard from '../components/DashboardCard'
+import DashboardCard from "../components/DashboardCard";
 
-import { getOrders } from '../services/ordersApi'
-import { getInvoices } from '../services/invoiceApi'
-import { getInventory } from '../services/inventoryApi'
+import { getOrders } from "../services/ordersApi";
+import { getInvoices } from "../services/invoiceApi";
+import { getInventory } from "../services/inventoryApi";
 
-import './DashboardPage.css'
+import "./DashboardPage.css";
 
 function DashboardPage() {
   const [stats, setStats] = useState({
@@ -16,45 +22,47 @@ function DashboardPage() {
     lowStock: 0,
     recentOrders: [],
     readyOrders: [],
-  })
+  });
 
   useEffect(() => {
-    loadDashboard()
-  }, [])
+    loadDashboard();
+  }, []);
 
   async function loadDashboard() {
     try {
-    const [
-  orders,
-  invoices,
-  inventory,
-] = await Promise.all([
-  getOrders(),
-  getInvoices(),
-  getInventory(),
-])
+      const [orders, invoices, inventory] =
+        await Promise.all([
+          getOrders(),
+          getInvoices(),
+          getInventory(),
+        ]);
 
       const revenue = invoices.reduce(
         (sum, invoice) =>
           sum + Number(invoice.totalAmount || 0),
         0
-      )
+      );
 
       const activeOrders = orders.filter(
-        (order) => order.status === 'Pending'
-      ).length
+        (order) =>
+          order.status !== "Completed" &&
+          order.status !== "Delivered"
+      ).length;
 
       const lowStock = inventory.filter(
-        (item) => Number(item.quantity || 0) <= 5
-      ).length
+        (item) =>
+          Number(item.quantity || 0) <= 5
+      ).length;
 
       const recentOrders = [...orders]
-        .slice(-5)
         .reverse()
+        .slice(0, 5);
 
       const readyOrders = orders.filter(
-        (order) => order.status === 'Completed'
-      )
+        (order) =>
+          order.status === "Completed" ||
+          order.status === "Ready"
+      );
 
       setStats({
         activeOrders,
@@ -63,14 +71,24 @@ function DashboardPage() {
         lowStock,
         recentOrders,
         readyOrders,
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
   return (
     <section className="dashboard-page">
+
+      <div className="mb-4">
+        <h1 className="mb-1">
+          Dashboard
+        </h1>
+
+        <p className="text-muted">
+          Welcome back! Here's your shop overview.
+        </p>
+      </div>
 
       <div className="row g-3 mb-4">
 
@@ -78,27 +96,35 @@ function DashboardPage() {
           <DashboardCard
             title="Active Orders"
             value={stats.activeOrders}
+            color="primary"
+            icon={<FiPackage />}
           />
         </div>
 
         <div className="col-md-3">
           <DashboardCard
             title="Revenue"
-            value={`Rs. ${stats.revenue.toLocaleString()}`}
+            value={`₹${stats.revenue.toLocaleString()}`}
+            color="success"
+            icon={<FiDollarSign />}
           />
         </div>
 
         <div className="col-md-3">
           <DashboardCard
-            title="Inventory Items"
+            title="Inventory"
             value={stats.inventory}
+            color="info"
+            icon={<FiArchive />}
           />
         </div>
 
         <div className="col-md-3">
           <DashboardCard
-            title="Low Stock Items"
+            title="Low Stock"
             value={stats.lowStock}
+            color="danger"
+            icon={<FiAlertTriangle />}
           />
         </div>
 
@@ -106,98 +132,139 @@ function DashboardPage() {
 
       <div className="row g-3">
 
-        <div className="col-md-7">
+        <div className="col-lg-7">
 
-          <article className="dashboard-block p-3">
+          <div className="card shadow-sm h-100">
 
-            <h2 className="mb-3">
-              Recent Orders
-            </h2>
+            <div className="card-body">
 
-            {stats.recentOrders.length === 0 ? (
+              <h5 className="mb-3">
+                Recent Orders
+              </h5>
 
-              <p>No recent orders.</p>
+              {stats.recentOrders.length === 0 ? (
 
-            ) : (
+                <p className="text-muted">
+                  No recent orders.
+                </p>
 
-              <ul className="list-group">
+              ) : (
 
-                {stats.recentOrders.map((order) => (
+                <table className="table">
 
-                  <li
-                    key={order.orderId}
-                    className="list-group-item d-flex justify-content-between"
-                  >
+                  <thead>
 
-                    <span>
-                      {order.customerName}
-                    </span>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Garment</th>
+                      <th>Status</th>
+                    </tr>
 
-                    <span>
-                      {order.garmentType}
-                    </span>
+                  </thead>
 
-                  </li>
+                  <tbody>
 
-                ))}
+                    {stats.recentOrders.map(
+                      (order) => (
 
-              </ul>
+                        <tr key={order.orderId}>
+                          <td>{order.customerName}</td>
+                          <td>{order.garmentType}</td>
+                          <td>{order.status}</td>
+                        </tr>
 
-            )}
+                      )
+                    )}
 
-          </article>
+                  </tbody>
+
+                </table>
+
+              )}
+
+            </div>
+
+          </div>
 
         </div>
 
-        <div className="col-md-5">
+        <div className="col-lg-5">
 
-          <article className="dashboard-block p-3">
+          <div className="card shadow-sm">
 
-            <h2 className="mb-3">
-              Ready for Pickup
-            </h2>
+            <div className="card-body">
 
-            {stats.readyOrders.length === 0 ? (
+              <h5 className="mb-3">
+                Ready for Pickup
+              </h5>
 
-              <p>No completed orders.</p>
+              {stats.readyOrders.length === 0 ? (
 
-            ) : (
+                <p className="text-muted">
+                  No ready orders.
+                </p>
 
-              <ul className="list-group">
+              ) : (
 
-                {stats.readyOrders.map((order) => (
+                <ul className="list-group">
 
-                  <li
-                    key={order.orderId}
-                    className="list-group-item"
-                  >
+                  {stats.readyOrders.map(
+                    (order) => (
 
-                    <strong>
-                      {order.customerName}
-                    </strong>
+                      <li
+                        key={order.orderId}
+                        className="list-group-item"
+                      >
 
-                    <br />
+                        <strong>
+                          {order.customerName}
+                        </strong>
 
-                    <small>
-                      {order.garmentType}
-                    </small>
+                        <br />
 
-                  </li>
+                        <small>
+                          {order.garmentType}
+                        </small>
 
-                ))}
+                      </li>
 
-              </ul>
+                    )
+                  )}
 
-            )}
+                </ul>
 
-          </article>
+              )}
+
+            </div>
+
+          </div>
+
+          <div className="card shadow-sm mt-3">
+
+            <div className="card-body">
+
+              <h5>
+                Inventory Alert
+              </h5>
+
+              <h2 className="text-danger">
+                {stats.lowStock}
+              </h2>
+
+              <p className="mb-0">
+                item(s) are running low.
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 
       </div>
 
     </section>
-  )
+  );
 }
 
-export default DashboardPage
+export default DashboardPage;
