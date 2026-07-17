@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request
 
-from services.settings_dynamodb_service import SettingsDynamoDBService
+from services.dynamodb_service import DynamoDBService
 
 settings_bp = Blueprint(
     "settings",
@@ -10,7 +10,9 @@ settings_bp = Blueprint(
     url_prefix="/settings",
 )
 
-settings_service = SettingsDynamoDBService()
+settings_service = DynamoDBService(
+    table_name="darzidesk-settings",
+)
 
 
 @settings_bp.get("")
