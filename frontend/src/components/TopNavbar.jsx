@@ -1,5 +1,5 @@
 import { FiBell, FiChevronDown, FiMenu, FiPlus } from 'react-icons/fi'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './TopNavbar.css'
 
 const routeTitleMap = {
@@ -16,7 +16,18 @@ const routeTitleMap = {
 
 function TopNavbar({ onToggle }) {
   const location = useLocation()
+  const navigate = useNavigate()
   const pageTitle = routeTitleMap[location.pathname] ?? 'Dashboard'
+
+  function handleLogout() {
+  localStorage.removeItem("darzidesk-token");
+  localStorage.removeItem("darzidesk-owner");
+
+  sessionStorage.removeItem("darzidesk-token");
+  sessionStorage.removeItem("darzidesk-owner");
+
+  navigate("/login");
+}
 
   return (
     <header className="top-navbar-shell px-4">
@@ -82,9 +93,13 @@ function TopNavbar({ onToggle }) {
               </button>
             </li>
             <li>
-              <button className="dropdown-item" type="button">
-                Logout
-              </button>
+              <button
+  className="dropdown-item text-danger"
+  type="button"
+  onClick={handleLogout}
+>
+  Logout
+</button>
             </li>
           </ul>
         </div>

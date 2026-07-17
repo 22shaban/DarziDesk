@@ -10,11 +10,14 @@ from .orders import orders_bp
 from .version import version_blueprint
 from .employees import employees_bp
 from .invoices import invoices_bp
+from .auth_routes import auth_bp
+from .settings import settings_bp
 
 def register_blueprints(app: Flask) -> None:
     """Register all API blueprints on the Flask application."""
     app.register_blueprint(health_blueprint)
     app.register_blueprint(version_blueprint)
+    app.register_blueprint(auth_bp)
 
     app.register_blueprint(orders_bp)
     app.register_blueprint(customers_bp)
@@ -22,3 +25,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(inventory_bp)
     app.register_blueprint(employees_bp)
     app.register_blueprint(invoices_bp)
+    app.register_blueprint(settings_bp)

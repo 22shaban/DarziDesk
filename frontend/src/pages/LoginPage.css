@@ -1,53 +1,60 @@
-.login-shell {
-  min-height: 100vh;
-  min-width: 1366px;
-  background-image: url('/images/login-background.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.login-overlay {
+.login-page {
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    rgba(15, 39, 68, 0.84),
-    rgba(15, 39, 68, 0.55)
-  );
+  align-items: center;
+
+background:
+  linear-gradient(
+    rgba(16,30,54,.75),
+    rgba(16,30,54,.75)
+  ),
+  url("/images/login-background.png");
+
+  background-size: cover;
+  background-position: center;
 }
 
-.login-panel {
-  width: 460px;
-  padding: 2.5rem;
+.login-card {
+  width: 420px;
   background: #ffffff;
-  border: 1px solid rgba(15, 39, 68, 0.05);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(15, 39, 68, 0.18);
+  border-radius: 20px;
+  padding: 40px;
   text-align: center;
 }
 
-.login-logo-full {
-  display: block;
-  width: min(320px, 100%);
-  height: auto;
-  object-fit: contain;
-  margin: 0 auto 20px;
+.login-logo {
+  width: 90px;
+  margin-bottom: 15px;
 }
 
-.login-panel h1 {
-  margin: 0;
-  font-size: 2rem;
+.login-card h2 {
   font-weight: 700;
-  color: var(--dd-navy);
+  color: #1f3558;
 }
 
-.login-panel p {
-  margin-top: 0.75rem;
-  margin-bottom: 0;
-  color: #5f6a76;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.login-card .form-control {
+  height: 46px;
+}
+
+.login-card .input-group-text {
+  background: #f8f9fa;
+}
+
+.login-card .btn-primary {
+  height: 46px;
+  font-weight: 600;
+}
+
+.login-card .btn-primary:hover {
+  transform: translateY(-1px);
+  transition: .2s;
+}
+
+.form-check {
+  text-align: left;
+}
+
+.alert {
+  text-align: left;
 }
