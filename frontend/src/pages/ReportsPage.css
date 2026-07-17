@@ -8,16 +8,22 @@
   color: var(--dd-navy);
 }
 
-.reports-preview-card {
-  background: #ffffff;
-  border: 1px solid #ebe6da;
-  border-radius: 20px;
-  box-shadow: var(--dd-shadow-soft);
-  min-height: 320px;
+.report-chart-card {
+  height: 340px;
 }
 
-.reports-preview-header h2 {
-  font-size: 1.03rem;
-  font-weight: 700;
-  color: var(--dd-navy);
+.report-chart-card canvas {
+  max-height: 260px !important;
+}
+
+.report-summary-card {
+  min-height: 95px;
+}
+
+.reports-preview-card {
+  margin-top: 1rem;
+}
+
+.list-group-item {
+  padding: 0.65rem 1rem;
 }
