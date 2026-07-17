@@ -1,42 +1,46 @@
-import { useEffect, useState } from 'react'
-import SettingsSection from './SettingsSection'
-import './SettingsForm.css'
-
-const defaultSettings = {
-  shopName: 'DarziDesk',
-  ownerName: '',
-  phone: '',
-  email: '',
-  address: '',
-}
+import { useEffect, useState } from "react";
+import SettingsSection from "./SettingsSection";
+import { getSettings, updateSettings } from "../../services/settingsApi";
+import "./SettingsForm.css";
 
 function SettingsForm() {
-  const [settings, setSettings] = useState(defaultSettings)
+  const [formData, setFormData] = useState({
+    shopName: "",
+    ownerName: "",
+    phone: "",
+    email: "",
+    address: "",
+    logoUrl: "",
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem('darzidesk-settings')
+    loadSettings();
+  }, []);
 
-    if (saved) {
-      setSettings(JSON.parse(saved))
+  async function loadSettings() {
+    try {
+      const data = await getSettings();
+      setFormData(data);
+    } catch (error) {
+      console.error(error);
     }
-  }, [])
-
-  function handleChange(e) {
-    const { name, value } = e.target
-
-    setSettings((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
   }
 
-  function handleSave() {
-    localStorage.setItem(
-      'darzidesk-settings',
-      JSON.stringify(settings)
-    )
+  function handleChange(event) {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  }
 
-    alert('Settings saved successfully!')
+  async function handleSave() {
+    try {
+      await updateSettings(formData);
+      alert("Settings saved successfully.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save settings.");
+    }
   }
 
   return (
@@ -47,72 +51,72 @@ function SettingsForm() {
         <div className="row g-3">
 
           <div className="col-md-6">
-            <label className="form-label">
-              Shop Name
-            </label>
+            <label className="form-label">Shop Name</label>
 
             <input
               className="form-control"
               name="shopName"
-              value={settings.shopName}
+              value={formData.shopName}
               onChange={handleChange}
             />
           </div>
 
           <div className="col-md-6">
-            <label className="form-label">
-              Owner Name
-            </label>
-
-            <input
-              className="form-control"
-              name="ownerName"
-              value={settings.ownerName}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">
-              Phone Number
-            </label>
+            <label className="form-label">Business Phone</label>
 
             <input
               className="form-control"
               name="phone"
-              value={settings.phone}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">
-              Email Address
-            </label>
-
-            <input
-              className="form-control"
-              name="email"
-              value={settings.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-12">
-            <label className="form-label">
-              Shop Address
-            </label>
-
-            <textarea
-              rows="3"
-              className="form-control"
-              name="address"
-              value={settings.address}
+              value={formData.phone}
               onChange={handleChange}
             />
           </div>
 
         </div>
+
+      </SettingsSection>
+
+      <SettingsSection title="Owner Profile">
+
+        <div className="row g-3">
+
+          <div className="col-md-6">
+            <label className="form-label">Owner Name</label>
+
+            <input
+              className="form-control"
+              name="ownerName"
+              value={formData.ownerName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">Email</label>
+
+            <input
+              className="form-control"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+        </div>
+
+      </SettingsSection>
+
+      <SettingsSection title="Business Address">
+
+        <label className="form-label">Address</label>
+
+        <textarea
+          className="form-control"
+          rows="3"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+        />
 
       </SettingsSection>
 
@@ -122,13 +126,13 @@ function SettingsForm() {
           className="btn settings-save-btn"
           onClick={handleSave}
         >
-          Save Settings
+          Save Changes
         </button>
 
       </div>
 
     </div>
-  )
+  );
 }
 
-export default SettingsForm
+export default SettingsForm;
