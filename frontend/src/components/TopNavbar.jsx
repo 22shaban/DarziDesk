@@ -1,6 +1,7 @@
 import { FiBell, FiChevronDown, FiMenu, FiPlus } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './TopNavbar.css'
+import { useShop } from "../context/ShopContext";
 
 const routeTitleMap = {
   '/dashboard': 'Dashboard',
@@ -16,6 +17,7 @@ const routeTitleMap = {
 
 function TopNavbar({ onToggle }) {
   const location = useLocation()
+  const { shop } = useShop();
   const navigate = useNavigate()
   const pageTitle = routeTitleMap[location.pathname] ?? 'Dashboard'
 
@@ -79,7 +81,7 @@ function TopNavbar({ onToggle }) {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Royal Men's Tailor <FiChevronDown className="ms-1" />
+           {shop?.shopName || "DarziDesk"} <FiChevronDown className="ms-1" />
           </button>
           <ul className="dropdown-menu dropdown-menu-end">
             <li>
