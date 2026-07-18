@@ -35,3 +35,11 @@
   border: 1px solid #ebe6da;
   box-shadow: var(--dd-shadow-soft);
 }
+.top-navbar-shop-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  padding: 3px;
+}

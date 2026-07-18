@@ -11,8 +11,7 @@ import {
   FiUsers,
 } from 'react-icons/fi'
 import './Sidebar.css'
-import { useEffect, useState } from "react";
-import { getSettings } from "../services/settingsApi";
+import { useShop } from "../context/ShopContext";
 
 const menuItems = [
   { label: 'Dashboard', icon: FiGrid, to: '/dashboard' },
@@ -27,25 +26,12 @@ const menuItems = [
 ]
 
 function Sidebar({ collapsed }) {
-  const [logoUrl, setLogoUrl] = useState("");
-
-useEffect(() => {
-  async function loadLogo() {
-    try {
-      const settings = await getSettings();
-      setLogoUrl(settings.logoUrl || "");
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  loadLogo();
-}, []);
+const { shop } = useShop();
   return (
     <aside className={`sidebar-shell ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-brand px-3 py-3">
-        <img
-  src={logoUrl || "/logo/darzidesk-logo.png"}
+   <img
+  src={shop?.logoUrl || "/logo/darzidesk-logo.png"}
   alt="Shop Logo"
   className="sidebar-logo"
 />

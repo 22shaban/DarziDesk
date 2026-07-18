@@ -81,7 +81,19 @@ function TopNavbar({ onToggle }) {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-           {shop?.shopName || "DarziDesk"} <FiChevronDown className="ms-1" />
+          <div className="d-flex align-items-center">
+  <img
+    src={shop?.logoUrl || "/logo/darzidesk-logo.png"}
+    alt="Shop Logo"
+    className="top-navbar-shop-logo"
+  />
+
+  <span className="ms-2">
+    {shop?.shopName || "DarziDesk"}
+  </span>
+
+  <FiChevronDown className="ms-2" />
+</div>
           </button>
           <ul className="dropdown-menu dropdown-menu-end">
             <li>
