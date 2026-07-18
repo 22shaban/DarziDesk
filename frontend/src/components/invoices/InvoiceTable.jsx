@@ -1,5 +1,6 @@
 import EmptyState from "../orders/EmptyState";
 import { generateInvoicePDF } from "../../utils/pdfGenerator";
+import { useShop } from "../../context/ShopContext";
 import "./InvoiceTable.css";
 
 const columns = [
@@ -17,6 +18,7 @@ function InvoiceTable({
   onEdit,
   onDelete,
 }) {
+  const { shop } = useShop();
   return (
     <div className="invoice-table-card">
       <table className="table align-middle mb-0">
@@ -70,7 +72,7 @@ function InvoiceTable({
 
                   <button
                     className="btn btn-sm btn-outline-success"
-                    onClick={() => generateInvoicePDF(invoice)}
+                    onClick={() => generateInvoicePDF(invoice, shop)}
                   >
                     PDF
                   </button>

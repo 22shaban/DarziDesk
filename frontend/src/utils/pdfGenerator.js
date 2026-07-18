@@ -1,29 +1,23 @@
 import { jsPDF } from "jspdf";
 
-export function generateInvoicePDF(invoice) {
+export function generateInvoicePDF(invoice, shop) {
   const doc = new jsPDF();
 
   // Load shop settings
-  const saved =
-    JSON.parse(
-      localStorage.getItem("darzidesk-settings")
-    ) || {};
+ const shopName =
+  shop?.shopName || "DarziDesk";
 
-  const shopName =
-    saved.shopName || "DarziDesk";
+const ownerName =
+  shop?.ownerName || "";
 
-  const ownerName =
-    saved.ownerName || "";
+const phone =
+  shop?.phone || "";
 
-  const phone =
-    saved.phone || "";
+const email =
+  shop?.email || "";
 
-  const email =
-    saved.email || "";
-
-  const address =
-    saved.address || "";
-
+const address =
+  shop?.address || "";
   // Header
   doc.setFontSize(22);
   doc.setTextColor(33, 37, 41);
