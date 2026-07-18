@@ -13,7 +13,7 @@ class DynamoDBService:
     def __init__(
         self,
         client: Any | None = None,
-        table_name: str = "",
+        table_name: str = "darzidesk-settings",
     ) -> None:
         self.client = client or create_boto3_client("dynamodb")
         self.table_name = table_name
@@ -453,3 +453,26 @@ class DynamoDBService:
                 },
             },
         )
+    def update_logo(
+    self,
+    logo_url: str,
+) -> Any:
+
+     return self.client.update_item(
+        TableName=self.table_name,
+        Key={
+            "settingId": {
+                "S": "SHOP",
+            },
+        },
+        UpdateExpression="""
+            SET logoUrl = :logoUrl
+        """,
+        ExpressionAttributeValues={
+            ":logoUrl": {
+                "S": logo_url,
+            },
+        },
+    )     
+          
+        
