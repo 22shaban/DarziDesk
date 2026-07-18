@@ -1,56 +1,75 @@
 import { jsPDF } from "jspdf";
 
-export function generateInvoicePDF(invoice, shop) {
+export async function generateInvoicePDF(invoice, shop) {
   const doc = new jsPDF();
 
-  // Load shop settings
- const shopName =
-  shop?.shopName || "DarziDesk";
+  const logoBase64 = shop?.logoBase64 || "";
 
-const ownerName =
-  shop?.ownerName || "";
+  const shopName = shop?.shopName || "DarziDesk";
+  const ownerName = shop?.ownerName || "";
+  const phone = shop?.phone || "";
+  const email = shop?.email || "";
+  const address = shop?.address || "";
 
-const phone =
-  shop?.phone || "";
-
-const email =
-  shop?.email || "";
-
-const address =
-  shop?.address || "";
+  // ==========================
   // Header
+  // ==========================
+
+  let headerY = 20;
+
+  if (logoBase64) {
+    try {
+      doc.addImage(
+        logoBase64,
+        "PNG",
+        20,
+        15,
+        28,
+        28
+      );
+    } catch (error) {
+      console.error("Failed to add logo:", error);
+    }
+  }
+
   doc.setFontSize(22);
   doc.setTextColor(33, 37, 41);
-  doc.text(shopName, 20, 20);
+  doc.text(shopName, 55, 23);
 
   doc.setFontSize(11);
   doc.setTextColor(100);
 
-  let headerY = 28;
+  headerY = 30;
 
   if (ownerName) {
-    doc.text(`Owner: ${ownerName}`, 20, headerY);
+    doc.text(`Owner: ${ownerName}`, 55, headerY);
     headerY += 6;
   }
 
   if (phone) {
-    doc.text(`Phone: ${phone}`, 20, headerY);
+    doc.text(`Phone: ${phone}`, 55, headerY);
     headerY += 6;
   }
 
   if (email) {
-    doc.text(`Email: ${email}`, 20, headerY);
+    doc.text(`Email: ${email}`, 55, headerY);
     headerY += 6;
   }
 
   if (address) {
-    doc.text(address, 20, headerY);
-    headerY += 6;
+    const lines = doc.splitTextToSize(address, 120);
+
+    doc.text(lines, 55, headerY);
+
+    headerY += lines.length * 6;
   }
 
   doc.line(20, headerY + 4, 190, headerY + 4);
 
+  // ==========================
   // Invoice Title
+  // ==========================
+
   doc.setFontSize(18);
   doc.setTextColor(0);
   doc.text("Invoice", 20, headerY + 18);
@@ -63,14 +82,11 @@ const address =
     ["Invoice ID", invoice.invoiceId || "-"],
     ["Order ID", invoice.orderId || "-"],
     ["Customer", invoice.customerName || "-"],
-    ["Total Amount", `Rs. ${invoice.totalAmount || 0}`],
-    ["Advance Paid", `Rs. ${invoice.advancePaid || 0}`],
-    ["Remaining Amount", `Rs. ${invoice.remainingAmount || 0}`],
+    ["Total Amount", `₹ ${invoice.totalAmount || 0}`],
+    ["Advance Paid", `₹ ${invoice.advancePaid || 0}`],
+    ["Remaining Amount", `₹ ${invoice.remainingAmount || 0}`],
     ["Payment Status", invoice.paymentStatus || "-"],
-    [
-      "Generated On",
-      new Date().toLocaleDateString(),
-    ],
+    ["Generated On", new Date().toLocaleDateString()],
   ];
 
   rows.forEach(([label, value]) => {

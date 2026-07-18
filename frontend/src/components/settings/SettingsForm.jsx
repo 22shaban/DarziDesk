@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import SettingsSection from "./SettingsSection";
 import { getSettings, updateSettings } from "../../services/settingsApi";
-import "./SettingsForm.css";
 import { uploadLogo } from "../../services/uploadApi";
+import { useShop } from "../../context/ShopContext";
+import "./SettingsForm.css";
 
 function SettingsForm() {
+  const { setShop } = useShop();
+
   const [formData, setFormData] = useState({
     shopName: "",
     ownerName: "",
@@ -12,6 +15,7 @@ function SettingsForm() {
     email: "",
     address: "",
     logoUrl: "",
+    logoBase64: "",
   });
 
   useEffect(() => {
@@ -21,7 +25,16 @@ function SettingsForm() {
   async function loadSettings() {
     try {
       const data = await getSettings();
-      setFormData(data);
+
+      setFormData((previous) => ({
+        ...previous,
+        ...data,
+      }));
+
+      setShop((previous) => ({
+        ...previous,
+        ...data,
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -33,28 +46,48 @@ function SettingsForm() {
       [event.target.name]: event.target.value,
     });
   }
-async function handleLogoUpload(event) {
-  const file = event.target.files[0];
 
-  if (!file) return;
+  async function handleLogoUpload(event) {
+    const file = event.target.files[0];
 
-  try {
-    const logoUrl = await uploadLogo(file);
+    if (!file) return;
 
-    setFormData((previous) => ({
-      ...previous,
-      logoUrl,
-    }));
+    try {
+      // Convert to Base64 for PDF
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
 
-    alert("Logo uploaded successfully.");
-  } catch (error) {
-    console.error(error);
-    alert("Logo upload failed.");
+        reader.onloadend = () => resolve(reader.result);
+
+        reader.readAsDataURL(file);
+      });
+
+      // Upload original image to S3
+      const logoUrl = await uploadLogo(file);
+
+      const updatedShop = {
+        ...formData,
+        logoUrl,
+        logoBase64: base64,
+      };
+
+      setFormData(updatedShop);
+
+      setShop(updatedShop);
+
+      alert("Logo uploaded successfully.");
+    } catch (error) {
+      console.error(error);
+      alert("Logo upload failed.");
+    }
   }
-}
+
   async function handleSave() {
     try {
       await updateSettings(formData);
+
+      setShop(formData);
+
       alert("Settings saved successfully.");
     } catch (error) {
       console.error(error);
@@ -122,33 +155,35 @@ async function handleLogoUpload(event) {
           </div>
 
         </div>
-<SettingsSection title="Shop Logo">
 
-  {formData.logoUrl && (
-    <div className="mb-3">
-      <img
-        src={formData.logoUrl}
-        alt="Shop Logo"
-        style={{
-          width: "120px",
-          height: "120px",
-          objectFit: "contain",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          padding: "10px",
-        }}
-      />
-    </div>
-  )}
+        <SettingsSection title="Shop Logo">
 
-  <input
-    type="file"
-    accept="image/*"
-    className="form-control"
-    onChange={handleLogoUpload}
-  />
+          {formData.logoUrl && (
+            <div className="mb-3">
+              <img
+                src={formData.logoUrl}
+                alt="Shop Logo"
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  objectFit: "contain",
+                  border: "1px solid #ddd",
+                  borderRadius: "10px",
+                  padding: "10px",
+                }}
+              />
+            </div>
+          )}
 
-</SettingsSection>
+          <input
+            type="file"
+            accept="image/*"
+            className="form-control"
+            onChange={handleLogoUpload}
+          />
+
+        </SettingsSection>
+
       </SettingsSection>
 
       <SettingsSection title="Business Address">

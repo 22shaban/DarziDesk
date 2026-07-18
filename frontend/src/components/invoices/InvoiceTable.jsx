@@ -19,6 +19,7 @@ function InvoiceTable({
   onDelete,
 }) {
   const { shop } = useShop();
+
   return (
     <div className="invoice-table-card">
       <table className="table align-middle mb-0">
@@ -72,7 +73,9 @@ function InvoiceTable({
 
                   <button
                     className="btn btn-sm btn-outline-success"
-                    onClick={() => generateInvoicePDF(invoice, shop)}
+                    onClick={() =>
+                      generateInvoicePDF(invoice, shop)
+                    }
                   >
                     PDF
                   </button>
