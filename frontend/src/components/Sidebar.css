@@ -31,13 +31,14 @@
 }
 
 .sidebar-logo {
-  height: 52px;
-  width: auto;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 6px;
   flex-shrink: 0;
-  display: block;
 }
-
 .sidebar-brand-copy h1 {
   margin: 0;
   font-size: 1.08rem;

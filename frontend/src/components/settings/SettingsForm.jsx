@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SettingsSection from "./SettingsSection";
 import { getSettings, updateSettings } from "../../services/settingsApi";
 import "./SettingsForm.css";
+import { uploadLogo } from "../../services/uploadApi";
 
 function SettingsForm() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,25 @@ function SettingsForm() {
       [event.target.name]: event.target.value,
     });
   }
+async function handleLogoUpload(event) {
+  const file = event.target.files[0];
 
+  if (!file) return;
+
+  try {
+    const logoUrl = await uploadLogo(file);
+
+    setFormData((previous) => ({
+      ...previous,
+      logoUrl,
+    }));
+
+    alert("Logo uploaded successfully.");
+  } catch (error) {
+    console.error(error);
+    alert("Logo upload failed.");
+  }
+}
   async function handleSave() {
     try {
       await updateSettings(formData);
@@ -103,7 +122,33 @@ function SettingsForm() {
           </div>
 
         </div>
+<SettingsSection title="Shop Logo">
 
+  {formData.logoUrl && (
+    <div className="mb-3">
+      <img
+        src={formData.logoUrl}
+        alt="Shop Logo"
+        style={{
+          width: "120px",
+          height: "120px",
+          objectFit: "contain",
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+          padding: "10px",
+        }}
+      />
+    </div>
+  )}
+
+  <input
+    type="file"
+    accept="image/*"
+    className="form-control"
+    onChange={handleLogoUpload}
+  />
+
+</SettingsSection>
       </SettingsSection>
 
       <SettingsSection title="Business Address">
