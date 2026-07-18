@@ -11,9 +11,14 @@ import { getCustomers } from "../services/customersApi";
 import { getInvoices } from "../services/invoiceApi";
 import { getInventory } from "../services/inventoryApi";
 
+import { generateReportPDF } from "../utils/reportPdfGenerator";
+import { useShop } from "../context/ShopContext";
+
 import "./ReportsPage.css";
 
 function ReportsPage() {
+  const { shop } = useShop();
+
   const [stats, setStats] = useState({
     revenue: 0,
     orders: 0,
@@ -77,12 +82,25 @@ function ReportsPage() {
   return (
     <section className="reports-page">
 
-      <div className="mb-3">
-        <h1 className="mb-1">Reports</h1>
+      <div className="d-flex justify-content-between align-items-center mb-3">
 
-        <p className="text-muted">
-          View your tailor shop business insights.
-        </p>
+        <div>
+          <h1 className="mb-1">Reports</h1>
+
+          <p className="text-muted mb-0">
+            View your tailor shop business insights.
+          </p>
+        </div>
+
+        <button
+          className="btn btn-success"
+          onClick={() =>
+            generateReportPDF(stats, shop)
+          }
+        >
+          Export Business Report
+        </button>
+
       </div>
 
       <ReportFilters />
