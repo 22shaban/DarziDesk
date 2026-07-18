@@ -2,6 +2,8 @@ import EmptyState from "../orders/EmptyState";
 import { generateInvoicePDF } from "../../utils/pdfGenerator";
 import { useShop } from "../../context/ShopContext";
 import "./InvoiceTable.css";
+import { sendInvoiceEmail } from "../../services/emailApi";
+import { getCustomers } from "../../services/customersApi";
 
 const columns = [
   "Order ID",
@@ -19,6 +21,37 @@ function InvoiceTable({
   onDelete,
 }) {
   const { shop } = useShop();
+ async function handleEmail(invoice) {
+  try {
+    const customers = await getCustomers();
+
+const customer = customers.find(
+  (c) => c.customerName === invoice.customerName
+);
+    if (!customer) {
+      alert("Customer not found.");
+      return;
+    }
+
+    if (!customer.email) {
+      alert("Customer has no email address.");
+      return;
+    }
+
+    await sendInvoiceEmail(
+      {
+        ...invoice,
+        customerEmail: customer.email,
+      },
+      shop
+    );
+
+    alert("Invoice email sent successfully.");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to send invoice email.");
+  }
+}
 
   return (
     <div className="invoice-table-card">
@@ -79,6 +112,12 @@ function InvoiceTable({
                   >
                     PDF
                   </button>
+                  <button
+  className="btn btn-sm btn-outline-warning ms-2"
+  onClick={() => handleEmail(invoice)}
+>
+  Email
+</button>
                 </td>
               </tr>
             ))
