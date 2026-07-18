@@ -11,6 +11,7 @@ from extensions import register_extensions
 from middleware import register_middlewares
 from routes import register_blueprints
 from utils.response import json_response
+from routes.email import email_bp
 
 
 def create_app(config_class: type[BaseConfig] | None = None) -> Flask:
