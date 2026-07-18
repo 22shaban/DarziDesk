@@ -12,6 +12,7 @@ from .employees import employees_bp
 from .invoices import invoices_bp
 from .auth_routes import auth_bp
 from .settings import settings_bp
+from .upload import upload_bp
 
 def register_blueprints(app: Flask) -> None:
     """Register all API blueprints on the Flask application."""
@@ -26,3 +27,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(employees_bp)
     app.register_blueprint(invoices_bp)
     app.register_blueprint(settings_bp)
+    app.register_blueprint(upload_bp)
