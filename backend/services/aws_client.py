@@ -1,11 +1,15 @@
-"""Shared boto3 session and client helpers for future AWS integrations."""
+"""Shared boto3 session and client helpers for AWS integrations."""
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 import boto3
 from boto3.session import Session
+
+
+DEFAULT_REGION = os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "ap-south-1"
 
 
 def get_boto3_session(
@@ -13,19 +17,13 @@ def get_boto3_session(
     aws_access_key_id: str | None = None,
     aws_secret_access_key: str | None = None,
 ) -> Session:
-    """Create a boto3 session without performing any AWS operations."""
-    session_kwargs: dict[str, str] = {}
+    """Create a boto3 session."""
 
-    if region_name:
-        session_kwargs["region_name"] = region_name
-
-    if aws_access_key_id:
-        session_kwargs["aws_access_key_id"] = aws_access_key_id
-
-    if aws_secret_access_key:
-        session_kwargs["aws_secret_access_key"] = aws_secret_access_key
-
-    return boto3.session.Session(**session_kwargs)
+    return boto3.Session(
+        region_name=region_name or DEFAULT_REGION,
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+    )
 
 
 def create_boto3_client(
@@ -35,10 +33,15 @@ def create_boto3_client(
     aws_access_key_id: str | None = None,
     aws_secret_access_key: str | None = None,
 ) -> Any:
-    """Create a service client placeholder for future AWS service modules."""
+    """Create a boto3 client."""
+
     active_session = session or get_boto3_session(
         region_name=region_name,
         aws_access_key_id=aws_access_key_id,
         aws_secret_access_key=aws_secret_access_key,
     )
-    return active_session.client(service_name)
+
+    return active_session.client(
+        service_name,
+        region_name=region_name or DEFAULT_REGION,
+    )
