@@ -1,78 +1,72 @@
-const API_URL = 'http://127.0.0.1:5000/orders'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+
+const API_URL = `${API_BASE_URL}/orders`;
 
 export async function getOrders() {
-  const response = await fetch(API_URL)
+  const response = await fetch(API_URL);
 
   if (!response.ok) {
-    throw new Error('Failed to fetch orders')
+    throw new Error("Failed to fetch orders");
   }
 
-  const data = await response.json()
+  const data = await response.json();
 
-  return data.data
+  return data.data;
 }
+
 export async function createOrder(order) {
-  const response = await fetch('http://127.0.0.1:5000/orders', {
-    method: 'POST',
+  const response = await fetch(API_URL, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(order),
-  })
+  });
 
   if (!response.ok) {
-    throw new Error('Failed to create order')
+    throw new Error("Failed to create order");
   }
 
-  return await response.json()
-}
-export async function deleteOrder(id){
-
-const response = await fetch(
-`http://127.0.0.1:5000/orders/${id}`,
-{
-method:"DELETE"
-}
-)
-
-
-if(!response.ok){
-
-throw new Error(
-"Failed to delete order"
-)
-
+  return await response.json();
 }
 
+export async function deleteOrder(id) {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
 
-return await response.json()
+  if (!response.ok) {
+    throw new Error("Failed to delete order");
+  }
 
+  return await response.json();
 }
+
 export async function updateOrder(orderId, order) {
-  const response = await fetch(`http://127.0.0.1:5000/orders/${orderId}`, {
-    method: 'PUT',
+  const response = await fetch(`${API_URL}/${orderId}`, {
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(order),
-  })
+  });
 
   if (!response.ok) {
-    throw new Error('Failed to update order')
+    throw new Error("Failed to update order");
   }
 
-  return await response.json()
+  return await response.json();
 }
+
 export async function getOrder(orderId) {
-  const response = await fetch(
-    `http://127.0.0.1:5000/orders/${orderId}`
-  )
+  const response = await fetch(`${API_URL}/${orderId}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch order")
+    throw new Error("Failed to fetch order");
   }
 
-  const json = await response.json()
+  const json = await response.json();
 
-  return json.data
+  return json.data;
 }

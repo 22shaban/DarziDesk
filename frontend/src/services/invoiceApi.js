@@ -1,4 +1,7 @@
-const API = "http://127.0.0.1:5000/invoices";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+
+const API = `${API_BASE_URL}/invoices`;
 
 export async function getInvoices() {
   const response = await fetch(API);
